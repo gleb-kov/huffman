@@ -5,6 +5,8 @@
 
 #include "../utils/types.h"
 
+//TODO: optimize with deque of ints, it's easy to reverse and convert to string
+
 class TBitcode {
     static constexpr size_t ALPHA = 1 << 8;
 

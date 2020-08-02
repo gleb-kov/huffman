@@ -1,7 +1,7 @@
 #include "defs.h"
 
 std::ifstream NFileUtils::OpenInputFile(const char *InFile) noexcept(false) {
-    std::ifstream fin(InFile, std::ifstream::binary);
+    std::ifstream fin(InFile, std::ifstream::binary); // TODO: std::ios::binary | std::ios::ate ???
 
     if (fin.fail()) {
         throw std::runtime_error("Cannot open input file.\n");

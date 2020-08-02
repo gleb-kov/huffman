@@ -9,13 +9,21 @@
 #include "bitcode.h"
 #include "../utils/types.h"
 
+// TODO: check cast between char and uchar everywhere
+// TODO: more const and static and attributes
+
 namespace NHuffmanConfig {
     constexpr size_t ALPHA = 1 << 8;
     constexpr size_t CHECKSUM_MASK = 7;
+    constexpr size_t META_BUF_SIZE = ALPHA * 4 + sizeof(uchar); // TODO: make 8
 }
 
+/***************************** TFrequencyCounter *****************************/
+
 struct TFrequencyCounter {
-    size_t Count[8][NHuffmanConfig::ALPHA] = {};
+    static constexpr size_t MAGIC = 8;
+
+    size_t Count[MAGIC][NHuffmanConfig::ALPHA] = {};
     size_t Length = 0;
 
     TFrequencyCounter() = default;
@@ -25,6 +33,24 @@ struct TFrequencyCounter {
 private:
     void DummyUpdate(const uchar *buf, size_t len);
 };
+
+/***************************** TFrequencyStorage *****************************/
+
+class TFrequencyStorage {
+    std::array<size_t, NHuffmanConfig::ALPHA> Storage = {};
+
+public:
+    TFrequencyStorage(const TFrequencyCounter&);
+
+    // used to restore Huffman tree
+    TFrequencyStorage(const uchar *meta);
+
+    char *EncodeMeta(uchar remainingBits) const;
+
+    size_t operator[](size_t ind) const;
+};
+
+/******************************* THuffmanTree ********************************/
 
 class THuffmanTree {
 private:
@@ -46,27 +72,23 @@ private:
     };
 
 private:
-    using TFreqArray = std::array<size_t, NHuffmanConfig::ALPHA>;
-    using TCodesArray = std::array<TBitcode, NHuffmanConfig::ALPHA>;
+    std::array<TBitcode, NHuffmanConfig::ALPHA> Codes;
 
-private:
-    TCodesArray Codes;
-    char *Meta;
+    // in case of encoding
+    char *Meta = nullptr;
+
+    // in case of decoding
     TNode *Root = nullptr;
 
 private:
-    void EncodeMeta(const TFreqArray &);
+    void EncodeMeta(const TFrequencyStorage &);
 
-public:
-    uchar RemainingBits = 0;
-
-    //TODO : check type
-    uchar CountRemainingBits(const TFreqArray &);
+    uchar CountRemainingBits(const TFrequencyStorage &) const;
 
 public:
     THuffmanTree() = default;
 
-    explicit THuffmanTree(const TFrequencyCounter &);
+    explicit THuffmanTree(const TFrequencyStorage &);
 
     [[nodiscard]] const char *GetMeta() const;
 

@@ -10,7 +10,9 @@
 
 namespace NHuffmanUtil {
 
-    constexpr size_t READ_BUFFER_SIZE = 1024;
+    constexpr size_t READ_BUFFER_SIZE = 1024; // TODO: fix when meta would be 2048
+
+    constexpr size_t META_BUFFER_SIZE = NHuffmanConfig::META_BUF_SIZE;
 
     void Compress(const char *InFile, const char *OutFile);
 

@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
         if (mode == 1) {
             NHuffmanUtil::Compress(argv[2], argv[3]);
         } else {
-            //decompress(argv[2], argv[3]);
+            NHuffmanUtil::Decompress(argv[2], argv[3]);
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what();

@@ -15,9 +15,11 @@ void NHuffmanUtil::Compress(const char *InFile, const char *OutFile) {
     fin.clear();
     fin.seekg(0, std::ios::beg);
 
-    THuffmanTree hft(fc);
-    fout.write(hft.GetMeta(), 1024);
-    fout << hft.RemainingBits;
+    TFrequencyStorage fs(fc);
+    THuffmanTree hft(fs);
+    fout.write(hft.GetMeta(), NHuffmanConfig::META_BUF_SIZE);
+
+    // TODO: compress
 
     while (fin) {
         fin.read((char *) RBUF, sizeof(RBUF));

@@ -27,28 +27,64 @@ void TFrequencyCounter::DummyUpdate(const uchar *buf, size_t len) {
     }
 }
 
-/******************************* THuffmanTree ********************************/
+/***************************** TFrequencyStorage *****************************/
 
-//TODO: check cnt in size_t
-
-THuffmanTree::THuffmanTree(const TFrequencyCounter &fc) {
-    using NHuffmanConfig::ALPHA;
-
-    TFreqArray cnt = {};
-
-    for (size_t i = 0; i < 8; i++) {
-        for (size_t j = 0; j < 256; j++) {
-            cnt[j] += fc.Count[i][j];
+TFrequencyStorage::TFrequencyStorage(const TFrequencyCounter &fc) {
+    for (size_t i = 0; i < TFrequencyCounter::MAGIC; i++) {
+        for (size_t j = 0; j < NHuffmanConfig::ALPHA; j++) {
+            Storage[j] += fc.Count[i][j];
         }
     }
+}
+
+TFrequencyStorage::TFrequencyStorage(const uchar *meta) {
+    // TODO: replace 4 with 8 since size_t
+    for (size_t i = 0; i < NHuffmanConfig::META_BUF_SIZE; i += 4) {
+        Storage[i >> 2] = meta[i + 3] | (meta[i + 2] << 8)
+                          | (meta[i + 1] << 16) | (meta[i] << 24);
+    }
+}
+
+size_t TFrequencyStorage::operator[](size_t ind) const {
+    return Storage[ind];
+}
+
+char * TFrequencyStorage::EncodeMeta(uchar remainingBits) const {
+    using namespace NHuffmanConfig;
+    char *meta = new char[META_BUF_SIZE];
+
+    // TODO: unsafe cast
+
+    for (uint i = 0; i < NHuffmanConfig::ALPHA; i++) {
+        size_t cur = Storage[i];
+        meta[4 * i + 3] = (unsigned char) (cur);
+        meta[4 * i + 2] = (unsigned char) (cur >>= 8);
+        meta[4 * i + 1] = (unsigned char) (cur >>= 8);
+        meta[4 * i] = (unsigned char) (cur >>= 8);
+    }
+    meta[META_BUF_SIZE - 1] = remainingBits;
+    return meta;
+    /*
+     * TODO: replace with memset when decoding meta works
+     */
+}
+
+/******************************* THuffmanTree ********************************/
+
+//TODO: check is cnt in size_t?
+
+THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
+    using NHuffmanConfig::ALPHA;
+
+    // TODO: refactor
 
     std::array<std::pair<size_t, size_t>, ALPHA> salph = {};
     for (size_t i = 0; i < ALPHA; i++) { // TODO: WTF
-        salph[i] = {cnt[i], i};
+        salph[i] = {fs[i], i};
         salph[i].second = i;
     }
     std::stable_sort(salph.begin(), salph.end());
-    std::vector<std::pair<uint32_t, std::vector<size_t>>> huff;
+    std::vector<std::pair<uint32_t, std::vector<size_t>>> huff; // TODO
 
     size_t c1 = 0, c2 = 0;
 
@@ -95,43 +131,27 @@ THuffmanTree::THuffmanTree(const TFrequencyCounter &fc) {
         }
     }
 
-    for (size_t i = 0; i < 256; i++) {
+    for (size_t i = 0; i < ALPHA; i++) {
         Codes[i].Reverse();
     }
 
-    EncodeMeta(cnt);
-    CountRemainingBits(cnt);
+    EncodeMeta(fs);
 }
 
-void THuffmanTree::EncodeMeta(const TFreqArray &fa) {
-    Meta = new char[1024];
-
-    for (uint i = 0; i < 256; i++) {
-        size_t cur = fa[i];
-        Meta[4 * i + 3] = (unsigned char) (cur);
-        Meta[4 * i + 2] = (unsigned char) (cur >>= 8);
-        Meta[4 * i + 1] = (unsigned char) (cur >>= 8);
-        Meta[4 * i] = (unsigned char) (cur >>= 8);
-    }
-
-    /*
-     * TODO: replace with when decoding meta works
-     *
-    static constexpr size_t BUF_SIZE = NHuffmanConfig::ALPHA * sizeof(size_t);
-    Meta = new char[BUF_SIZE];
-    memcpy(Meta, fa.data(), BUF_SIZE);
-     */
+void THuffmanTree::EncodeMeta(const TFrequencyStorage &fs) {
+    uchar remainingBits = CountRemainingBits(fs);
+    Meta = fs.EncodeMeta(remainingBits);
 }
 
 // count remaining bits, used check sum
-uchar THuffmanTree::CountRemainingBits(const TFreqArray &fa) {
+uchar THuffmanTree::CountRemainingBits(const TFrequencyStorage &fs) const {
     size_t total = 0;
     for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
-        total += fa[i] * Codes[i].GetSize();
+        total += fs[i] * Codes[i].GetSize();
         total &= NHuffmanConfig::CHECKSUM_MASK;
     }
-    RemainingBits = (total % 8 ? 8 - (total % 8) : 0); // TODO: just total
-    return total; // length of encoded part mod 8
+    // TODO: just total, use mask from config
+    return (total % 8 ? 8 - (total % 8) : 0); // length of encoded part mod 8
 }
 
 const char *THuffmanTree::GetMeta() const {
