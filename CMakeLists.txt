@@ -8,13 +8,9 @@ set(GTEST_SRC
         ${PROJECT_SOURCE_DIR}/gtest/gtest.h
         ${PROJECT_SOURCE_DIR}/gtest/gtest_main.cc)
 
-add_library(huflib STATIC
-        lib/bitcode.h
-        lib/bitcode.cpp
-        lib/encode_deque.h
-        lib/encode_deque.cpp
-        lib/coding.h
-        lib/coding.cpp)
+add_subdirectory(lib)
+
+# TODO: replace utility and utils with one-include files
 
 add_executable(huffman main.cpp utility/defs.h utility/compress.cpp utility/decompress.cpp utils/file.h utils/types.h utils/defs.h utils/utils.cpp)
 
