@@ -6,6 +6,8 @@
 #include "../utils/defs.h"
 #include "../lib/coding.h"
 
+// TODO: replace with one-include file
+
 namespace NHuffmanUtil {
 
     constexpr size_t READ_BUFFER_SIZE = 1024;

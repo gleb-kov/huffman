@@ -6,7 +6,7 @@
 #include "../utils/types.h"
 
 class TBitcode {
-    static constexpr size_t ALPHA = sizeof(uchar);
+    static constexpr size_t ALPHA = 1 << 8;
 
     std::bitset<ALPHA> Code;
     size_t Size = 0;

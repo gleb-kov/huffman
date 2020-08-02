@@ -17,4 +17,6 @@ using ui16 = uint16_t;
 using ui32 = uint32_t;
 using ui64 = uint64_t;
 
+static_assert(sizeof(size_t) == 8);
+
 #endif //HUFFMAN_TYPES_H

@@ -5,23 +5,9 @@
 
 namespace NFileUtils {
 
-    std::ifstream OpenInputFile(const char *InFile) noexcept(false) {
-        std::ifstream fin(InFile, std::ifstream::binary);
+    std::ifstream OpenInputFile(const char *InFile) noexcept(false);
 
-        if (fin.fail()) {
-            throw std::runtime_error("Cannot open input file.\n");
-        }
-        return fin;
-    }
-
-    std::ofstream OpenOutputFile(const char *OutFile) noexcept (false) {
-        std::ofstream fout(OutFile);
-
-        if (fout.fail()) {
-            throw std::runtime_error("Cannot open output file.\n");
-        }
-        return fout;
-    }
+    std::ofstream OpenOutputFile(const char *OutFile) noexcept(false);
 
 }
 

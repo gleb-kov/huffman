@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
 
+#include "utility/defs.h"
+
 int main(int argc, char *argv[]) {
     // TODO: verbose progress
     if (argc == 2 && strcmp(argv[1], "--help") == 0) {
@@ -34,9 +36,9 @@ int main(int argc, char *argv[]) {
     // TODO: chrono
     auto start_time = clock();
 
-    /*try {
+    try {
         if (mode == 1) {
-            //compress(argv[2], argv[3]);
+            NHuffmanUtil::Compress(argv[2], argv[3]);
         } else {
             //decompress(argv[2], argv[3]);
         }
@@ -44,7 +46,6 @@ int main(int argc, char *argv[]) {
         std::cout << ex.what();
         return 0;
     }
-*/
 
     std::cout << "Finished in " << std::fixed << (double) (clock() - start_time) / CLOCKS_PER_SEC << " seconds.\n";
     return 0;

@@ -1,5 +1,7 @@
 #include "bitcode.h"
 
+// TODO: check if possible, move to header or even to coding.h
+
 size_t TBitcode::GetSize() const noexcept {
     return Size;
 }
