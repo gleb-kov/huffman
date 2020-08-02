@@ -4,8 +4,5 @@ add_library(huflib STATIC
         bitcode.h
         bitcode.cpp
 
-        encode_deque.h
-        encode_deque.cpp
-
         coding.h
         coding.cpp)

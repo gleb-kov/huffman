@@ -57,12 +57,12 @@ private:
     struct TNode {
         TNode *Sub[2];
         char Symbol;
-        // bool IsTerm;
+        bool IsTerm;
 
         TNode() {
             Sub[0] = Sub[1] = nullptr;
             Symbol = 0;
-            // IsTerm = false;
+            IsTerm = false;
         }
 
         ~TNode() {
@@ -89,6 +89,8 @@ public:
     THuffmanTree() = default;
 
     explicit THuffmanTree(const TFrequencyStorage &);
+
+    void BuildTree();
 
     [[nodiscard]] const char *GetMeta() const;
 

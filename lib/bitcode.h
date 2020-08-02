@@ -18,7 +18,8 @@ public:
 
     [[nodiscard]] size_t GetSize() const noexcept;
 
-    //bool operator[]
+    // TODO: rewrite
+    size_t operator[](size_t ind) const;
 
     void SetZero() noexcept;
 

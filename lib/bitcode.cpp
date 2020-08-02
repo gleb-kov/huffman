@@ -6,6 +6,10 @@ size_t TBitcode::GetSize() const noexcept {
     return Size;
 }
 
+size_t TBitcode::operator[](size_t ind) const {
+    return Code[ind - 1] ? 1 : 0;
+}
+
 void TBitcode::SetZero() noexcept {
     Size++;
 }

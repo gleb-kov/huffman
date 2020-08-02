@@ -154,6 +154,26 @@ uchar THuffmanTree::CountRemainingBits(const TFrequencyStorage &fs) const {
     return (total % 8 ? 8 - (total % 8) : 0); // length of encoded part mod 8
 }
 
+void THuffmanTree::BuildTree() {
+    // TODO: refactor
+
+    Root = new TNode();
+    for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
+        TNode *cur = Root;
+        for (size_t j = 0; j < Codes[i].GetSize(); j++) {
+            if (!Codes[i][j]) {
+                if (!cur->Sub[0]) cur->Sub[0] = new TNode();
+                cur = cur->Sub[0];
+            } else {
+                if (!cur->Sub[1]) cur->Sub[1] = new TNode();
+                cur = cur->Sub[1];
+            }
+        }
+        cur->IsTerm = true;
+        cur->Symbol = (char) i;
+    }
+}
+
 const char *THuffmanTree::GetMeta() const {
     return Meta;
 }
