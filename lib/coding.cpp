@@ -1,5 +1,3 @@
-#include <cstring>
-
 #include "coding.h"
 
 /***************************** TFrequencyCounter *****************************/
@@ -45,10 +43,6 @@ TFrequencyStorage::TFrequencyStorage(const uchar *meta) {
     }
 }
 
-size_t TFrequencyStorage::operator[](size_t ind) const {
-    return Storage[ind];
-}
-
 char * TFrequencyStorage::EncodeMeta(uchar remainingBits) const {
     using namespace NHuffmanConfig;
     char *meta = new char[META_BUF_SIZE];
@@ -65,8 +59,12 @@ char * TFrequencyStorage::EncodeMeta(uchar remainingBits) const {
     meta[META_BUF_SIZE - 1] = remainingBits;
     return meta;
     /*
-     * TODO: replace with memset when decoding meta works
+     * TODO: replace with memcpy when decoding meta works
      */
+}
+
+size_t TFrequencyStorage::operator[](size_t ind) const {
+    return Storage[ind];
 }
 
 /******************************* THuffmanTree ********************************/
@@ -161,13 +159,11 @@ void THuffmanTree::BuildTree() {
     for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
         TNode *cur = Root;
         for (size_t j = 0; j < Codes[i].GetSize(); j++) {
-            if (!Codes[i][j]) {
-                if (!cur->Sub[0]) cur->Sub[0] = new TNode();
-                cur = cur->Sub[0];
-            } else {
-                if (!cur->Sub[1]) cur->Sub[1] = new TNode();
-                cur = cur->Sub[1];
+            size_t sub = Codes[i][j];
+            if (!cur->Sub[sub]) {
+                cur->Sub[sub] = new TNode;
             }
+            cur = cur->Sub[sub];
         }
         cur->IsTerm = true;
         cur->Symbol = (char) i;

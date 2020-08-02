@@ -15,8 +15,25 @@ void NHuffmanUtil::Decompress(const char *InFile, const char *OutFile) {
     // TODO: check if it's EOF when bad... ?
 
     TFrequencyStorage fs(RBUF);
-    //THuffmanTree hft(fs);
+    THuffmanTree hft(fs);
+    hft.BuildTree();
 
-    // TODO: decompress
+    auto decoder = hft.GetDecodeBuffer<NHuffmanUtil::DECODE_BUFFER_SIZE>();
+
+    // TODO: untested
+    while (fin) {
+        fin.read((char *) RBUF, sizeof(RBUF));
+        decoder.Decode(RBUF, fin.gcount());
+
+        if (decoder.IsFull()) {
+            fout.write(decoder.Get(), decoder.GetSize());
+            decoder.ClearBuffer();
+        }
+    }
+
+    while(!decoder.Empty()) {
+        fout.write(decoder.Get(), decoder.GetSize());
+        decoder.ClearBuffer();
+    }
 }
 

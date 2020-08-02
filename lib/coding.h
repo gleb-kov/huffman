@@ -3,6 +3,7 @@
 
 #include <array>
 #include <algorithm>
+#include <deque>
 #include <vector>
 #include <iostream>
 
@@ -11,6 +12,7 @@
 
 // TODO: check cast between char and uchar everywhere
 // TODO: more const and static and attributes
+// TODO: config to another file
 
 namespace NHuffmanConfig {
     constexpr size_t ALPHA = 1 << 8;
@@ -40,36 +42,87 @@ class TFrequencyStorage {
     std::array<size_t, NHuffmanConfig::ALPHA> Storage = {};
 
 public:
-    TFrequencyStorage(const TFrequencyCounter&);
+    explicit TFrequencyStorage(const TFrequencyCounter&);
 
     // used to restore Huffman tree
-    TFrequencyStorage(const uchar *meta);
+    explicit TFrequencyStorage(const uchar *meta);
 
-    char *EncodeMeta(uchar remainingBits) const;
+    // pass buffer ownership
+    [[nodiscard]] char *EncodeMeta(uchar remainingBits) const;
 
     size_t operator[](size_t ind) const;
+};
+
+/***************************** THuffmanTreeNode **************************/
+
+struct THuffmanTreeNode {
+    THuffmanTreeNode *Sub[2];
+    char Symbol;
+    bool IsTerm;
+
+    THuffmanTreeNode() {
+        Sub[0] = Sub[1] = nullptr;
+        Symbol = 0;
+        IsTerm = false;
+    }
+
+    ~THuffmanTreeNode() {
+        delete Sub[0];
+        delete Sub[1];
+    }
+};
+
+/***************************** TDecodeBuffer *****************************/
+
+template<size_t BUF_SIZE>
+class TDecodeBuffer {
+    char Result[BUF_SIZE] = {};
+    std::deque<std::pair<uchar *, size_t>> Queue;
+    size_t Size = 0;
+    THuffmanTreeNode* Root;
+
+public:
+    TDecodeBuffer(THuffmanTreeNode *root) : Root(root) {};
+
+    void Process() {
+        if (IsFull()) {
+            return;
+        }
+
+        // TODO
+    }
+
+    void Decode(uchar *buf, size_t len) {
+        Queue.emplace_back(buf, len);
+        Process();
+    }
+
+    char * Get() const {
+        return Result;
+    }
+
+    size_t GetSize() const {
+        return Size;
+    }
+
+    bool IsFull() const {
+        return Size == BUF_SIZE;
+    }
+
+    bool Empty() const {
+        return Size == 0 && Queue.empty();
+    }
+
+    void ClearBuffer() {
+        Size = 0;
+        Process();
+    }
 };
 
 /******************************* THuffmanTree ********************************/
 
 class THuffmanTree {
-private:
-    struct TNode {
-        TNode *Sub[2];
-        char Symbol;
-        bool IsTerm;
-
-        TNode() {
-            Sub[0] = Sub[1] = nullptr;
-            Symbol = 0;
-            IsTerm = false;
-        }
-
-        ~TNode() {
-            delete Sub[0];
-            delete Sub[1];
-        }
-    };
+    using TNode = THuffmanTreeNode;
 
 private:
     std::array<TBitcode, NHuffmanConfig::ALPHA> Codes;
@@ -90,11 +143,16 @@ public:
 
     explicit THuffmanTree(const TFrequencyStorage &);
 
+    ~THuffmanTree();
+
     void BuildTree();
 
     [[nodiscard]] const char *GetMeta() const;
 
-    ~THuffmanTree();
+    template<size_t BUF_SIZE>
+    TDecodeBuffer<BUF_SIZE> GetDecodeBuffer() const {
+        return TDecodeBuffer<BUF_SIZE>(Root);
+    }
 };
 
 #endif //HUFFMAN_CODING_H
