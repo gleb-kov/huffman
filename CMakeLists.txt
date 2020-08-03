@@ -10,9 +10,7 @@ set(GTEST_SRC
 
 add_subdirectory(lib)
 
-# TODO: replace utility and utils with one-include files
-
-add_executable(huffman main.cpp utility/defs.h utility/compress.cpp utility/decompress.cpp utils/file.h utils/types.h utils/defs.h utils/utils.cpp)
+add_executable(huffman main.cpp utility/utility.h utility/utility.cpp utils/defs.h utils/utils.cpp config.h)
 
 target_link_libraries(huffman huflib)
 

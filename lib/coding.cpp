@@ -1,5 +1,7 @@
 #include "coding.h"
 
+using namespace NConfig::NHuffmanCoding;
+
 /***************************** TFrequencyCounter *****************************/
 
 void TFrequencyCounter::Update(const uchar *buf, size_t len) {
@@ -29,7 +31,7 @@ void TFrequencyCounter::DummyUpdate(const uchar *buf, size_t len) {
 
 TFrequencyStorage::TFrequencyStorage(const TFrequencyCounter &fc) {
     for (size_t i = 0; i < TFrequencyCounter::MAGIC; i++) {
-        for (size_t j = 0; j < NHuffmanConfig::ALPHA; j++) {
+        for (size_t j = 0; j < ALPHA; j++) {
             Storage[j] += fc.Count[i][j];
         }
     }
@@ -37,19 +39,18 @@ TFrequencyStorage::TFrequencyStorage(const TFrequencyCounter &fc) {
 
 TFrequencyStorage::TFrequencyStorage(const uchar *meta) {
     // TODO: replace 4 with 8 since size_t
-    for (size_t i = 0; i < NHuffmanConfig::META_BUF_SIZE; i += 4) {
+    for (size_t i = 0; i < META_BUF_SIZE; i += 4) {
         Storage[i >> 2] = meta[i + 3] | (meta[i + 2] << 8)
                           | (meta[i + 1] << 16) | (meta[i] << 24);
     }
 }
 
 char * TFrequencyStorage::EncodeMeta(uchar remainingBits) const {
-    using namespace NHuffmanConfig;
     char *meta = new char[META_BUF_SIZE];
 
     // TODO: unsafe cast
 
-    for (uint i = 0; i < NHuffmanConfig::ALPHA; i++) {
+    for (uint i = 0; i < ALPHA; i++) {
         size_t cur = Storage[i];
         meta[4 * i + 3] = (unsigned char) (cur);
         meta[4 * i + 2] = (unsigned char) (cur >>= 8);
@@ -72,8 +73,6 @@ size_t TFrequencyStorage::operator[](size_t ind) const {
 //TODO: check is cnt in size_t?
 
 THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
-    using NHuffmanConfig::ALPHA;
-
     // TODO: refactor
 
     std::array<std::pair<size_t, size_t>, ALPHA> salph = {};
@@ -144,9 +143,9 @@ THuffmanTree::~THuffmanTree() {
 void THuffmanTree::EncodeMeta(const TFrequencyStorage &fs) {
     // count remaining bits, used check sum
     size_t total = 0;
-    for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
+    for (size_t i = 0; i < ALPHA; i++) {
         total += fs[i] * Codes[i].GetSize();
-        total &= NHuffmanConfig::CHECKSUM_MASK;
+        total &= CHECKSUM_MASK;
     }
     // TODO: just total, use mask from config
     uchar remainingBits = (total % 8 ? 8 - (total % 8) : 0); // length of encoded part mod 8
@@ -159,7 +158,7 @@ void THuffmanTree::Restore() {
         return;
     }
     Root = new TNode();
-    for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
+    for (size_t i = 0; i < ALPHA; i++) {
         TNode *cur = Root;
         for (size_t j = 0; j < Codes[i].GetSize(); j++) {
             size_t sub = Codes[i][j];

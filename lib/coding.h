@@ -8,25 +8,19 @@
 #include <iostream>
 
 #include "bitcode.h"
-#include "../utils/types.h"
+#include "../utils/defs.h"
+#include "../config.h"
 
 // TODO: check cast between char and uchar everywhere
 // TODO: more const and static and attributes
-// TODO: config to another file
 // TODO: refactor
-
-namespace NHuffmanConfig {
-    constexpr size_t ALPHA = 1 << 8;
-    constexpr size_t CHECKSUM_MASK = 7;
-    constexpr size_t META_BUF_SIZE = ALPHA * 4 + sizeof(uchar); // TODO: make 8
-}
 
 /***************************** TFrequencyCounter *****************************/
 
 struct TFrequencyCounter {
     static constexpr size_t MAGIC = 8;
 
-    size_t Count[MAGIC][NHuffmanConfig::ALPHA] = {};
+    size_t Count[MAGIC][NConfig::NHuffmanCoding::ALPHA] = {};
     size_t Length = 0;
 
     TFrequencyCounter() = default;
@@ -40,7 +34,7 @@ private:
 /***************************** TFrequencyStorage *****************************/
 
 class TFrequencyStorage {
-    std::array<size_t, NHuffmanConfig::ALPHA> Storage = {};
+    std::array<size_t, NConfig::NHuffmanCoding::ALPHA> Storage = {};
 
 public:
     explicit TFrequencyStorage(const TFrequencyCounter &);
@@ -77,7 +71,7 @@ struct THuffmanTreeNode {
 
 class THuffmanTree {
 public:
-    using TCodesArray = std::array<TBitcode, NHuffmanConfig::ALPHA>;
+    using TCodesArray = std::array<TBitcode, NConfig::NHuffmanCoding::ALPHA>;
     using TNode = THuffmanTreeNode;
 
 private:

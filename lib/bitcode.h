@@ -3,7 +3,7 @@
 
 #include <bitset>
 
-#include "../utils/types.h"
+#include "../utils/defs.h"
 
 //TODO: optimize with deque of ints, it's easy to reverse and convert to string
 

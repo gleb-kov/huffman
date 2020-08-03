@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "utility/defs.h"
+#include "utility/utility.h"
 
 int main(int argc, char *argv[]) {
     // TODO: verbose progress
@@ -38,9 +38,9 @@ int main(int argc, char *argv[]) {
 
     try {
         if (mode == 1) {
-            NHuffmanUtil::Compress(argv[2], argv[3]);
+            NHuffmanUtility::Compress(argv[2], argv[3]);
         } else {
-            NHuffmanUtil::Decompress(argv[2], argv[3]);
+            NHuffmanUtility::Decompress(argv[2], argv[3]);
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what();

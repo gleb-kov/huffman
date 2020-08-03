@@ -7,4 +7,6 @@ add_library(huflib STATIC
         coding.h
         coding.cpp
 
-        coding_buffers.h)
+        coding_buffers.h
+
+        ../config.h)
