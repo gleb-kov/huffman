@@ -137,24 +137,19 @@ THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
 }
 
 void THuffmanTree::EncodeMeta(const TFrequencyStorage &fs) {
-    uchar remainingBits = CountRemainingBits(fs);
-    Meta = fs.EncodeMeta(remainingBits);
-}
-
-// count remaining bits, used check sum
-uchar THuffmanTree::CountRemainingBits(const TFrequencyStorage &fs) const {
+    // count remaining bits, used check sum
     size_t total = 0;
     for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
         total += fs[i] * Codes[i].GetSize();
         total &= NHuffmanConfig::CHECKSUM_MASK;
     }
     // TODO: just total, use mask from config
-    return (total % 8 ? 8 - (total % 8) : 0); // length of encoded part mod 8
+    uchar remainingBits = (total % 8 ? 8 - (total % 8) : 0); // length of encoded part mod 8
+
+    Meta = fs.EncodeMeta(remainingBits);
 }
 
 void THuffmanTree::BuildTree() {
-    // TODO: refactor
-
     Root = new TNode();
     for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
         TNode *cur = Root;

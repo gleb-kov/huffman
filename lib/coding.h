@@ -13,6 +13,7 @@
 // TODO: check cast between char and uchar everywhere
 // TODO: more const and static and attributes
 // TODO: config to another file
+// TODO: refactor
 
 namespace NHuffmanConfig {
     constexpr size_t ALPHA = 1 << 8;
@@ -82,7 +83,7 @@ class TDecodeBuffer {
     THuffmanTreeNode* Root;
 
 public:
-    TDecodeBuffer(THuffmanTreeNode *root) : Root(root) {};
+    explicit TDecodeBuffer(THuffmanTreeNode *root) : Root(root) {};
 
     void Process() {
         if (IsFull()) {
@@ -97,19 +98,19 @@ public:
         Process();
     }
 
-    char * Get() const {
+    [[nodiscard]] char * Get() {
         return Result;
     }
 
-    size_t GetSize() const {
+    [[nodiscard]] size_t GetSize() const {
         return Size;
     }
 
-    bool IsFull() const {
+    [[nodiscard]] bool IsFull() const {
         return Size == BUF_SIZE;
     }
 
-    bool Empty() const {
+    [[nodiscard]] bool Empty() const {
         return Size == 0 && Queue.empty();
     }
 
@@ -136,11 +137,7 @@ private:
 private:
     void EncodeMeta(const TFrequencyStorage &);
 
-    uchar CountRemainingBits(const TFrequencyStorage &) const;
-
 public:
-    THuffmanTree() = default;
-
     explicit THuffmanTree(const TFrequencyStorage &);
 
     ~THuffmanTree();

@@ -36,4 +36,3 @@ void NHuffmanUtil::Decompress(const char *InFile, const char *OutFile) {
         decoder.ClearBuffer();
     }
 }
-
