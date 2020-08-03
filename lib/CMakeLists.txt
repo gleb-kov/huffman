@@ -5,4 +5,6 @@ add_library(huflib STATIC
         bitcode.cpp
 
         coding.h
-        coding.cpp)
+        coding.cpp
+
+        coding_buffers.h)

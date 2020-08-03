@@ -43,7 +43,7 @@ class TFrequencyStorage {
     std::array<size_t, NHuffmanConfig::ALPHA> Storage = {};
 
 public:
-    explicit TFrequencyStorage(const TFrequencyCounter&);
+    explicit TFrequencyStorage(const TFrequencyCounter &);
 
     // used to restore Huffman tree
     explicit TFrequencyStorage(const uchar *meta);
@@ -73,60 +73,15 @@ struct THuffmanTreeNode {
     }
 };
 
-/***************************** TDecodeBuffer *****************************/
-
-template<size_t BUF_SIZE>
-class TDecodeBuffer {
-    char Result[BUF_SIZE] = {};
-    std::deque<std::pair<uchar *, size_t>> Queue;
-    size_t Size = 0;
-    THuffmanTreeNode* Root;
-
-public:
-    explicit TDecodeBuffer(THuffmanTreeNode *root) : Root(root) {};
-
-    void Process() {
-        if (IsFull()) {
-            return;
-        }
-
-        // TODO
-    }
-
-    void Decode(uchar *buf, size_t len) {
-        Queue.emplace_back(buf, len);
-        Process();
-    }
-
-    [[nodiscard]] char * Get() {
-        return Result;
-    }
-
-    [[nodiscard]] size_t GetSize() const {
-        return Size;
-    }
-
-    [[nodiscard]] bool IsFull() const {
-        return Size == BUF_SIZE;
-    }
-
-    [[nodiscard]] bool Empty() const {
-        return Size == 0 && Queue.empty();
-    }
-
-    void ClearBuffer() {
-        Size = 0;
-        Process();
-    }
-};
-
 /******************************* THuffmanTree ********************************/
 
 class THuffmanTree {
+public:
+    using TCodesArray = std::array<TBitcode, NHuffmanConfig::ALPHA>;
     using TNode = THuffmanTreeNode;
 
 private:
-    std::array<TBitcode, NHuffmanConfig::ALPHA> Codes;
+    TCodesArray Codes;
 
     // in case of encoding
     char *Meta = nullptr;
@@ -142,14 +97,13 @@ public:
 
     ~THuffmanTree();
 
-    void BuildTree();
+    void Restore();
 
-    [[nodiscard]] const char *GetMeta() const;
+    [[nodiscard]] const char *GetMeta() const; // TODO: ownership?
 
-    template<size_t BUF_SIZE>
-    TDecodeBuffer<BUF_SIZE> GetDecodeBuffer() const {
-        return TDecodeBuffer<BUF_SIZE>(Root);
-    }
+    [[nodiscard]] TNode * GetRoot() const; // TODO: ownership?
+
+    TCodesArray GetCodes() const;
 };
 
 #endif //HUFFMAN_CODING_H

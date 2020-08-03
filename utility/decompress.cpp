@@ -16,14 +16,12 @@ void NHuffmanUtil::Decompress(const char *InFile, const char *OutFile) {
 
     TFrequencyStorage fs(RBUF);
     THuffmanTree hft(fs);
-    hft.BuildTree();
-
-    auto decoder = hft.GetDecodeBuffer<NHuffmanUtil::DECODE_BUFFER_SIZE>();
+    auto decoder = TDecodeBuffer<NHuffmanUtil::DECODE_BUFFER_SIZE>(hft);
 
     // TODO: untested
     while (fin) {
         fin.read((char *) RBUF, sizeof(RBUF));
-        decoder.Decode(RBUF, fin.gcount());
+        decoder.Process(RBUF, fin.gcount());
 
         if (decoder.IsFull()) {
             fout.write(decoder.Get(), decoder.GetSize());

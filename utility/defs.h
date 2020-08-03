@@ -5,6 +5,7 @@
 
 #include "../utils/defs.h"
 #include "../lib/coding.h"
+#include "../lib/coding_buffers.h"
 
 // TODO: replace with one-include file
 

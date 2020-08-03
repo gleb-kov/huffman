@@ -136,6 +136,11 @@ THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
     EncodeMeta(fs);
 }
 
+THuffmanTree::~THuffmanTree() {
+    delete Root;
+    delete[] Meta;
+}
+
 void THuffmanTree::EncodeMeta(const TFrequencyStorage &fs) {
     // count remaining bits, used check sum
     size_t total = 0;
@@ -149,7 +154,10 @@ void THuffmanTree::EncodeMeta(const TFrequencyStorage &fs) {
     Meta = fs.EncodeMeta(remainingBits);
 }
 
-void THuffmanTree::BuildTree() {
+void THuffmanTree::Restore() {
+    if (Root) { // already has tree
+        return;
+    }
     Root = new TNode();
     for (size_t i = 0; i < NHuffmanConfig::ALPHA; i++) {
         TNode *cur = Root;
@@ -169,7 +177,10 @@ const char *THuffmanTree::GetMeta() const {
     return Meta;
 }
 
-THuffmanTree::~THuffmanTree() {
-    delete Root;
-    delete[] Meta;
+THuffmanTreeNode *THuffmanTree::GetRoot() const {
+    return Root;
+}
+
+THuffmanTree::TCodesArray THuffmanTree::GetCodes() const {
+    return Codes;
 }
