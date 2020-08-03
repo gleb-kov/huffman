@@ -68,6 +68,32 @@ size_t TFrequencyStorage::operator[](size_t ind) const {
     return Storage[ind];
 }
 
+/********************************** TBitcode *********************************/
+
+size_t TBitcode::GetSize() const noexcept {
+    return Size;
+}
+
+size_t TBitcode::operator[](size_t ind) const {
+    return Code[ind - 1] ? 1 : 0;
+}
+
+void TBitcode::SetZero() noexcept {
+    Size++;
+}
+
+void TBitcode::SetOne() noexcept {
+    Code[Size++] = true;
+}
+
+void TBitcode::Reverse() {
+    for (size_t i = 1; i <= Size - i; i++) {
+        bool tmp = Code[i - 1];
+        Code[i - 1] = Code[Size - i];
+        Code[Size - i] = tmp;
+    }
+}
+
 /******************************* THuffmanTree ********************************/
 
 //TODO: check is cnt in size_t?
@@ -141,13 +167,15 @@ THuffmanTree::~THuffmanTree() {
 }
 
 void THuffmanTree::EncodeMeta(const TFrequencyStorage &fs) {
+    // TODO: get rid of remaining bits, it's useless
+    // TODO: recalc meta buffer size
+
     // count remaining bits, used check sum
     size_t total = 0;
     for (size_t i = 0; i < ALPHA; i++) {
         total += fs[i] * Codes[i].GetSize();
         total &= CHECKSUM_MASK;
     }
-    // TODO: just total, use mask from config
     uchar remainingBits = (total % 8 ? 8 - (total % 8) : 0); // length of encoded part mod 8
 
     Meta = fs.EncodeMeta(remainingBits);

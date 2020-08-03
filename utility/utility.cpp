@@ -38,7 +38,6 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile) {
         throw std::runtime_error("Input file was damaged. Cannot restore Huffman tree.\n");
     }
 
-    uchar remainingBits = RBUF[META_BUFFER_SIZE - 1]; // TODO: check correctness
     // TODO: check if it's EOF when bad... ?
 
     TFrequencyStorage fs(RBUF);

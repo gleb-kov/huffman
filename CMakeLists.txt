@@ -10,7 +10,7 @@ set(GTEST_SRC
 
 add_subdirectory(lib)
 
-add_executable(huffman main.cpp utility/utility.h utility/utility.cpp utils/defs.h utils/utils.cpp config.h)
+add_executable(huffman main.cpp utility/utility.h utility/utility.cpp utils/utils.h utils/utils.cpp config.h)
 
 target_link_libraries(huffman huflib)
 

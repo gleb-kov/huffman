@@ -1,7 +1,7 @@
 #ifndef HUFFMAN_CONFIG_H
 #define HUFFMAN_CONFIG_H
 
-#include "utils/defs.h"
+#include "utils/utils.h"
 
 namespace NConfig {
 
@@ -12,7 +12,7 @@ namespace NConfig {
     namespace NHuffmanCoding {
         constexpr size_t ALPHA = 1 << 8;
         constexpr size_t CHECKSUM_MASK = 7;
-        constexpr size_t META_BUF_SIZE = ALPHA * 4 + sizeof(uchar); // TODO: make 8
+        constexpr size_t META_BUF_SIZE = ALPHA * 4 + sizeof(uchar); // TODO: make 8 and rm uchar
     }
 
     namespace NHuffmanUtility {

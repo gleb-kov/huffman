@@ -1,4 +1,4 @@
-#include "defs.h"
+#include "utils.h"
 
 std::ifstream NFileUtils::OpenInputFile(const char *InFile) noexcept(false) {
     std::ifstream fin(InFile, std::ifstream::binary); // TODO: std::ios::binary | std::ios::ate ???
