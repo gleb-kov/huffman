@@ -38,30 +38,13 @@ TFrequencyStorage::TFrequencyStorage(const TFrequencyCounter &fc) {
 }
 
 TFrequencyStorage::TFrequencyStorage(const uchar *meta) {
-    // TODO: replace 4 with 8 since size_t
-    for (size_t i = 0; i < META_BUF_SIZE; i += 4) {
-        Storage[i >> 2] = meta[i + 3] | (meta[i + 2] << 8)
-                          | (meta[i + 1] << 16) | (meta[i] << 24);
-    }
+    memcpy(Storage.data(), meta, sizeof(Storage));
 }
 
-char * TFrequencyStorage::EncodeMeta(uchar remainingBits) const {
-    char *meta = new char[META_BUF_SIZE];
-
-    // TODO: unsafe cast
-
-    for (uint i = 0; i < ALPHA; i++) {
-        size_t cur = Storage[i];
-        meta[4 * i + 3] = (unsigned char) (cur);
-        meta[4 * i + 2] = (unsigned char) (cur >>= 8);
-        meta[4 * i + 1] = (unsigned char) (cur >>= 8);
-        meta[4 * i] = (unsigned char) (cur >>= 8);
-    }
-    meta[META_BUF_SIZE - 1] = remainingBits;
+char *TFrequencyStorage::EncodeMeta() const {
+    char *meta = new char[META_BUFFER_SIZE];
+    memcpy(meta, Storage.data(), sizeof(Storage));
     return meta;
-    /*
-     * TODO: replace with memcpy when decoding meta works
-     */
 }
 
 size_t TFrequencyStorage::operator[](size_t ind) const {
@@ -167,18 +150,7 @@ THuffmanTree::~THuffmanTree() {
 }
 
 void THuffmanTree::EncodeMeta(const TFrequencyStorage &fs) {
-    // TODO: get rid of remaining bits, it's useless
-    // TODO: recalc meta buffer size
-
-    // count remaining bits, used check sum
-    size_t total = 0;
-    for (size_t i = 0; i < ALPHA; i++) {
-        total += fs[i] * Codes[i].GetSize();
-        total &= CHECKSUM_MASK;
-    }
-    uchar remainingBits = (total % 8 ? 8 - (total % 8) : 0); // length of encoded part mod 8
-
-    Meta = fs.EncodeMeta(remainingBits);
+    Meta = fs.EncodeMeta();
 }
 
 void THuffmanTree::Restore() {

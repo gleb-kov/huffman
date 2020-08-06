@@ -6,6 +6,8 @@
 #include <bitset>
 #include <vector>
 
+#include <cstring>
+
 #include "../utils/utils.h"
 #include "../config.h"
 
@@ -41,7 +43,7 @@ public:
     explicit TFrequencyStorage(const uchar *meta);
 
     // pass buffer ownership
-    [[nodiscard]] char *EncodeMeta(uchar remainingBits) const;
+    [[nodiscard]] char *EncodeMeta() const;
 
     size_t operator[](size_t ind) const;
 };

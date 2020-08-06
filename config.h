@@ -12,13 +12,13 @@ namespace NConfig {
     namespace NHuffmanCoding {
         constexpr size_t ALPHA = 1 << 8;
         constexpr size_t CHECKSUM_MASK = 7;
-        constexpr size_t META_BUF_SIZE = ALPHA * 4 + sizeof(uchar); // TODO: make 8 and rm uchar
+        constexpr size_t META_BUFFER_SIZE = ALPHA * sizeof(size_t);
     }
 
     namespace NHuffmanUtility {
-        constexpr size_t READ_BUFFER_SIZE = 1024;
+        using NHuffmanCoding::META_BUFFER_SIZE;
 
-        constexpr size_t META_BUFFER_SIZE = NHuffmanCoding::META_BUF_SIZE;
+        constexpr size_t READ_BUFFER_SIZE = 1024;
 
         constexpr size_t DECODE_BUFFER_SIZE = 1024;
     }
