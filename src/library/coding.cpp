@@ -1,8 +1,8 @@
-#include "coding.h"
-
 #include <algorithm>
 #include <cstring>
 #include <vector>
+
+#include "coding.h"
 
 using namespace NConfig::NHuffmanCoding;
 

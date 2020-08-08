@@ -10,7 +10,7 @@
 
 namespace NConfig {
 
-    namespace NUtils {
+    namespace NParallelUtils {
         constexpr size_t THREADS_CNT = 8;
 
         constexpr size_t BUFFER_MIN_SIZE = 4096000;

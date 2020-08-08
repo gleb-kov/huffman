@@ -8,11 +8,10 @@ set(GTEST_SRC
         ${PROJECT_SOURCE_DIR}/gtest/gtest.h
         ${PROJECT_SOURCE_DIR}/gtest/gtest_main.cc)
 
-add_subdirectory(library)
+include_directories(.)
 
-add_executable(huffman utility/main.cpp utility/utility.h utility/utility.cpp utils/utils.h utils/utils.cpp config.h)
-
-target_link_libraries(huffman huflib)
+add_subdirectory(src)
+add_subdirectory(tests)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++17 -pedantic -O2")

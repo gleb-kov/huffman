@@ -1,10 +1,10 @@
 #ifndef HUFFMAN_UTILITY_DEFS_H
 #define HUFFMAN_UTILITY_DEFS_H
 
-#include "../utils/utils.h"
-#include "../library/coding.h"
-#include "../library/coding_buffers.h"
-#include "../config.h"
+#include "src/config.h"
+#include "src/library/coding.h"
+#include "src/library/coding_buffers.h"
+#include "src/utils/utils.h"
 
 namespace NHuffmanUtility {
 

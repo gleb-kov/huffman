@@ -4,8 +4,8 @@
 #include <array>
 #include <bitset>
 
-#include "../utils/utils.h"
-#include "../config.h"
+#include "src/config.h"
+#include "src/utils/utils.h"
 
 // TODO: check cast between char and uchar everywhere
 // TODO: refactor

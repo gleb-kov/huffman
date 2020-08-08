@@ -1,8 +1,8 @@
 #ifndef UTILS_DEFS_H
 #define UTILS_DEFS_H
 
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 #include <fstream>
 
 using uchar = unsigned char;
