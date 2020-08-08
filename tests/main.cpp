@@ -22,7 +22,6 @@ std::string TextByFreq(const TFreqArray &arr) {
 
 bool MyTest(const TFreqArray &arr) {
     std::string buf = TextByFreq(arr);
-
     std::random_shuffle(buf.begin(), buf.end());
 
     TFrequencyCounter fc;
@@ -32,6 +31,7 @@ bool MyTest(const TFreqArray &arr) {
     char *meta = fs.EncodeMeta();
 
     TFrequencyStorage fs2(meta);
+
     bool okay = true;
     for (size_t i = 0; i < ALPHA; i++) {
         okay &= fs[i] == fs2[i];
@@ -90,11 +90,13 @@ size_t Accepted = 0;
 size_t Failed = 0;
 
 bool CompareFiles() {
+    static const size_t BUF_SIZE = 4096;
+
     bool status = true;
+    std::ifstream lhs(InputFile);
+    std::ifstream rhs(OutputFile);
+    char buf1[BUF_SIZE], buf2[BUF_SIZE];
 
-    std::ifstream lhs(InputFile), rhs(OutputFile);
-
-    char buf1[1024], buf2[1024];
     while (lhs && rhs && status) {
         lhs.read(buf1, sizeof(buf1));
         rhs.read(buf2, sizeof(buf2));
@@ -102,7 +104,6 @@ bool CompareFiles() {
             status = false;
             break;
         }
-
         for (size_t i = 0; i < (size_t) lhs.gcount(); i++) {
             status &= (buf1[i] == buf2[i]);
         }
@@ -119,7 +120,6 @@ void OnTestEnd(bool status) {
     } else {
         Failed++;
     }
-
     std::remove(InputFile);
     std::remove(TempFile);
     std::remove(OutputFile);

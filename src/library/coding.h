@@ -68,65 +68,39 @@ public:
 /***************************** THuffmanTreeNode **************************/
 
 struct THuffmanTreeNode {
-    THuffmanTreeNode *Sub[2]; // nobody get direct access
+    THuffmanTreeNode *Sub[2]{}; // nobody get direct access
     char Symbol;
     bool IsTerm;
 
-    THuffmanTreeNode() {
-        Sub[0] = Sub[1] = nullptr;
-        Symbol = 0;
-        IsTerm = false;
-    }
+    THuffmanTreeNode();
 
-    ~THuffmanTreeNode() {
-        delete Sub[0];
-        delete Sub[1];
-    }
+    ~THuffmanTreeNode();
 };
 
 /********************************** TBitTree *********************************/
 
 class TBitTree {
     std::shared_ptr<THuffmanTreeNode> Root;
-    THuffmanTreeNode *State;
+    THuffmanTreeNode *State = nullptr;
 
 public:
-    explicit TBitTree(std::shared_ptr<THuffmanTreeNode> &root) : Root(root) {}
+    explicit TBitTree(std::shared_ptr<THuffmanTreeNode>);
 
     ~TBitTree() = default;
 
     /* Pre: bit equals 0 or 1 */
-    void GoBy(size_t bit) {
-        State = State->Sub[bit];
-    }
+    void GoBy(size_t bit);
 
-    void GoByZero() {
-        GoBy(0);
-    }
+    void GoByZero();
 
-    void GoByOne() {
-        GoBy(1);
-    }
+    void GoByOne();
 
-    [[nodiscard]] bool IsValidState() const {
-        // either parent of two subtrees or leaf
-        if (State && State->Sub[0] && State->Sub[1] && !State->IsTerm) {
-            return true;
-        }
-        if (State && !State->Sub[0] && !State->Sub[1] && State->IsTerm) {
-            return true;
-        }
-        return false;
-    }
+    [[nodiscard]] bool IsValidState() const;
 
-    [[nodiscard]] bool IsTerm() const {
-        return State->IsTerm;
-    }
+    [[nodiscard]] bool IsTerm() const;
 
     /* Pre: IsTerm == true */
-    [[nodiscard]] char GetSymbol() const {
-        return State->Symbol;
-    }
+    [[nodiscard]] char GetSymbol() const;
 };
 
 /******************************* THuffmanTree ********************************/

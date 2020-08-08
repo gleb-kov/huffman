@@ -80,6 +80,55 @@ void TBitCode::Reverse() {
     }
 }
 
+/***************************** THuffmanTreeNode **************************/
+
+THuffmanTreeNode::THuffmanTreeNode() {
+    Sub[0] = Sub[1] = nullptr;
+    Symbol = 0;
+    IsTerm = false;
+}
+
+THuffmanTreeNode::~THuffmanTreeNode() {
+    delete Sub[0];
+    delete Sub[1];
+}
+
+/********************************** TBitTree *********************************/
+
+TBitTree::TBitTree(std::shared_ptr<THuffmanTreeNode> root)
+        : Root(std::move(root)) {}
+
+void TBitTree::GoBy(size_t bit) {
+    State = State->Sub[bit];
+}
+
+void TBitTree::GoByZero() {
+    GoBy(0);
+}
+
+void TBitTree::GoByOne() {
+    GoBy(1);
+}
+
+bool TBitTree::IsValidState() const {
+    // either parent of two subtrees or leaf
+    if (State && State->Sub[0] && State->Sub[1] && !State->IsTerm) {
+        return true;
+    }
+    if (State && !State->Sub[0] && !State->Sub[1] && State->IsTerm) {
+        return true;
+    }
+    return false;
+}
+
+bool TBitTree::IsTerm() const {
+    return State->IsTerm;
+}
+
+char TBitTree::GetSymbol() const {
+    return State->Symbol;
+}
+
 /******************************* THuffmanTree ********************************/
 
 THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
