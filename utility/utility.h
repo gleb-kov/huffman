@@ -2,8 +2,8 @@
 #define HUFFMAN_UTILITY_DEFS_H
 
 #include "../utils/utils.h"
-#include "../lib/coding.h"
-#include "../lib/coding_buffers.h"
+#include "../library/coding.h"
+#include "../library/coding_buffers.h"
 #include "../config.h"
 
 namespace NHuffmanUtility {

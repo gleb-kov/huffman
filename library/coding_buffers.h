@@ -3,23 +3,23 @@
 
 #include "coding.h"
 
+/***************************** TSimpleCodingBuffer ***************************/
 /*
  * ONE THREADED ENCODER AND DECODER
  */
 
-/***************************** TCodingBuffer *********************************/
 
 template<size_t BUF_SIZE>
-struct TCodingBuffer {
+struct TSimpleCodingBuffer {
 protected:
     char Result[BUF_SIZE] = {};
     size_t Size = 0;
 
-    uchar * Tail = nullptr;
+    uchar *Tail = nullptr;
     size_t TailLen = 0;
 
 public:
-    TCodingBuffer() = default;
+    TSimpleCodingBuffer() = default;
 
     virtual void Process(uchar *buf, size_t len) = 0;
 
@@ -48,11 +48,12 @@ public:
 /***************************** TEncodeBuffer *********************************/
 
 template<size_t BUF_SIZE>
-class TEncodeBuffer : public TCodingBuffer<BUF_SIZE> {
+class TEncodeBuffer : public TSimpleCodingBuffer<BUF_SIZE> {
     THuffmanTree::TCodesArray Codes;
 
 public:
-    TEncodeBuffer(THuffmanTree &tree) : Codes(tree.GetCodes()) {}
+    TEncodeBuffer(THuffmanTree &tree)
+            : TSimpleCodingBuffer<BUF_SIZE>(), Codes(tree.GetCodes()) {}
 
     void Process(uchar *buf, size_t len) override {
         // TODO
@@ -62,12 +63,12 @@ public:
 /***************************** TDecodeBuffer *********************************/
 
 template<size_t BUF_SIZE>
-class TDecodeBuffer : public TCodingBuffer<BUF_SIZE> {
+class TDecodeBuffer : public TSimpleCodingBuffer<BUF_SIZE> {
     THuffmanTreeNode *Root; // TODO: shared_ptr
 
 public:
     explicit TDecodeBuffer(THuffmanTree &tree)
-            : TCodingBuffer<BUF_SIZE>() {
+            : TSimpleCodingBuffer<BUF_SIZE>() {
         tree.Restore();
         Root = tree.GetRoot();
     };

@@ -2,17 +2,12 @@
 #define HUFFMAN_CODING_H
 
 #include <array>
-#include <algorithm>
 #include <bitset>
-#include <vector>
-
-#include <cstring>
 
 #include "../utils/utils.h"
 #include "../config.h"
 
 // TODO: check cast between char and uchar everywhere
-// TODO: more const and static and attributes
 // TODO: refactor
 
 /***************************** TFrequencyCounter *****************************/
@@ -28,7 +23,7 @@ struct TFrequencyCounter {
     void Update(const uchar *buf, size_t len);
 
 private:
-    void DummyUpdate(const uchar *buf, size_t len);
+    void UpdateImpl(const uchar *buf, size_t len);
 };
 
 /***************************** TFrequencyStorage *****************************/
@@ -81,14 +76,13 @@ public:
 
     [[nodiscard]] size_t GetSize() const noexcept;
 
-    // TODO: rewrite
     size_t operator[](size_t ind) const;
 
     void SetZero() noexcept;
 
     void SetOne() noexcept;
 
-    [[deprecated]] void Reverse();
+    void Reverse();
 };
 
 /******************************* THuffmanTree ********************************/
@@ -119,9 +113,11 @@ public:
 
     [[nodiscard]] const char *GetMeta() const; // TODO: ownership?
 
-    [[nodiscard]] TNode * GetRoot() const; // TODO: ownership?
+    [[nodiscard]] TNode *GetRoot() const; // TODO: ownership?
 
-    TCodesArray GetCodes() const;
+    [[nodiscard]] TCodesArray GetCodes() const;
+
+    [[nodiscard]] TBitcode GetBitcode(uchar symb) const;
 };
 
 #endif //HUFFMAN_CODING_H

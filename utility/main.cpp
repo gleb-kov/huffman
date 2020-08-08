@@ -1,14 +1,14 @@
 #include <iostream>
 #include <cstring>
 
-#include "utility/utility.h"
+#include "utility.h"
 
 int main(int argc, char *argv[]) {
     // TODO: verbose progress
     if (argc == 2 && strcmp(argv[1], "--help") == 0) {
         std::cout << "Сonsole utility for compressing/decompressing files using Huffman coding\n";
         std::cout << "Usage: <mode> <input file> <output file>\n";
-        std::cout << "Modes:\n";
+        std::cout << "<mode>:\n";
         std::cout << "-c        Compress file\n";
         std::cout << "-d        Decompress file\n";
         std::cout << "--test    Test library\n";

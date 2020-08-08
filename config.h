@@ -3,16 +3,25 @@
 
 #include "utils/utils.h"
 
+/*
+ * Parallel computations is not implemented yet.
+ * Coding would be paralleled if USE_PARALLEL = true and processed buffer size >= BUFFER_MIN_SIZE
+ */
+
 namespace NConfig {
 
-    //namespace NUtils {
-        // constants for parallel calculations
-    //}
+    namespace NUtils {
+        constexpr size_t THREADS_CNT = 8;
+
+        constexpr size_t BUFFER_MIN_SIZE = 4096000;
+    }
 
     namespace NHuffmanCoding {
         constexpr size_t ALPHA = 1 << 8;
-        constexpr size_t CHECKSUM_MASK = 7;
+
         constexpr size_t META_BUFFER_SIZE = ALPHA * sizeof(size_t);
+
+        constexpr bool USE_PARALLEL = false; // count frequency
     }
 
     namespace NHuffmanUtility {
@@ -21,6 +30,8 @@ namespace NConfig {
         constexpr size_t READ_BUFFER_SIZE = 1024;
 
         constexpr size_t DECODE_BUFFER_SIZE = 1024;
+
+        constexpr bool USE_PARALLEL = false; // parallel encoding
     }
 
 }

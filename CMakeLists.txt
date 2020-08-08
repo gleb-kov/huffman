@@ -8,13 +8,14 @@ set(GTEST_SRC
         ${PROJECT_SOURCE_DIR}/gtest/gtest.h
         ${PROJECT_SOURCE_DIR}/gtest/gtest_main.cc)
 
-add_subdirectory(lib)
+add_subdirectory(library)
 
-add_executable(huffman main.cpp utility/utility.h utility/utility.cpp utils/utils.h utils/utils.cpp config.h)
+add_executable(huffman utility/main.cpp utility/utility.h utility/utility.cpp utils/utils.h utils/utils.cpp config.h)
 
 target_link_libraries(huffman huflib)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -ggdb -std=c++17 -pedantic -O2 -flto")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG -fsanitize=address,undefined,leak")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++17 -pedantic -O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG -ggdb -fsanitize=address,undefined,leak")
 endif()

@@ -1,16 +1,20 @@
 #include "coding.h"
 
+#include <algorithm>
+#include <cstring>
+#include <vector>
+
 using namespace NConfig::NHuffmanCoding;
 
 /***************************** TFrequencyCounter *****************************/
 
 void TFrequencyCounter::Update(const uchar *buf, size_t len) {
     Length += len;
-    DummyUpdate(buf, len);
-    // TODO: parallel
+    UpdateImpl(buf, len);
+    // TODO: parallel if possible
 }
 
-void TFrequencyCounter::DummyUpdate(const uchar *buf, size_t len) {
+void TFrequencyCounter::UpdateImpl(const uchar *buf, size_t len) {
     size_t it = (len >> 3) << 3;
     for (size_t i = 0; i < it;) {
         ++Count[0][buf[i++]];
@@ -57,6 +61,7 @@ size_t TBitcode::GetSize() const noexcept {
     return Size;
 }
 
+// TODO: rewrite
 size_t TBitcode::operator[](size_t ind) const {
     return Code[ind - 1] ? 1 : 0;
 }
@@ -137,10 +142,9 @@ THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
         }
     }
 
-    for (size_t i = 0; i < ALPHA; i++) {
-        Codes[i].Reverse();
+    for (auto &code : Codes) {
+        code.Reverse();
     }
-
     EncodeMeta(fs);
 }
 
@@ -182,4 +186,8 @@ THuffmanTreeNode *THuffmanTree::GetRoot() const {
 
 THuffmanTree::TCodesArray THuffmanTree::GetCodes() const {
     return Codes;
+}
+
+TBitcode THuffmanTree::GetBitcode(uchar symb) const {
+    return Codes[symb];
 }
