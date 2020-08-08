@@ -1,7 +1,7 @@
 #ifndef HUFFMAN_CODING_BUFFERS_H
 #define HUFFMAN_CODING_BUFFERS_H
 
-#include "coding.h"
+#include "src/library/coding.h"
 
 /***************************** TSimpleCodingBuffer ***************************/
 /*
@@ -56,7 +56,7 @@ public:
             : TSimpleCodingBuffer<BUF_SIZE>(), Codes(tree.GetCodes()) {}
 
     void Process(uchar *buf, size_t len) override {
-        // TODO
+
     }
 };
 
@@ -64,7 +64,7 @@ public:
 
 template<size_t BUF_SIZE>
 class TDecodeBuffer : public TSimpleCodingBuffer<BUF_SIZE> {
-    THuffmanTreeNode *Root; // TODO: shared_ptr
+    THuffmanTreeNode *Root;
 
 public:
     explicit TDecodeBuffer(THuffmanTree &tree)
@@ -75,7 +75,7 @@ public:
 
     void Process(uchar *buf, size_t len) override {
         // assert(Tail == nullptr); ?? what if call from clear()?
-        // TODO
+
     }
 };
 

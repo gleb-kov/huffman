@@ -40,8 +40,6 @@ void NHuffmanUtility::Compress(const char *InFile, const char *OutFile,
         PrintStage("build codes and write meta", stageTimer);
     }
 
-    // TODO: compress
-
     /*while (fin) {
         fin.read((char *) readBuffer, sizeof(readBuffer));
         //for (size_t i = 0; i < (size_t) fin.gcount(); i++)
@@ -62,8 +60,6 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
         throw std::runtime_error("Input file was damaged. Cannot restore Huffman tree.");
     }
 
-    // TODO: check if total size of fs != total decoded
-
     if (verbose) {
         PrintStage("read meta and restore Huffman tree", stageTimer);
     }
@@ -72,7 +68,6 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
     /*THuffmanTree hft(fs);
     auto decoder = TDecodeBuffer<DECODE_BUFFER_SIZE>(hft);
 
-    // TODO: untested
     while (fin) {
         fin.read((char *) readBuffer, sizeof(readBuffer));
         decoder.Process(readBuffer, fin.gcount());
