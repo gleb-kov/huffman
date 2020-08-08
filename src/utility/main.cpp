@@ -6,9 +6,13 @@
 int main(int argc, char *argv[]) {
     if (argc == 2 && strcmp(argv[1], "--help") == 0) {
         std::cout << "Сonsole utility for compressing/decompressing files using Huffman coding" << std::endl;
+        std::cout << "Github: https://github.com/gleb-kov/huffman" << std::endl << std::endl;
+
         std::cout << "Usage: [opts] <mode> <input file> <output file>" << std::endl;
+
         std::cout << "[opts]:" << std::endl;
-        std::cout << "-v, --verbose                 Verbose." << std::endl;
+        std::cout << "-v, --verbose                 Verbose." << std::endl << std::endl;
+
         std::cout << "<mode>:" << std::endl;
         std::cout << "-c, --compress, --encode      Compress file." << std::endl;
         std::cout << "-d, --decompress, --decode    Decompress file." << std::endl;
@@ -20,7 +24,7 @@ int main(int argc, char *argv[]) {
 
     bool verbose = false;
 
-    if (strcmp(argv[1], "-v") == 0 ||  strcmp(argv[1], "--verbose") == 0) {
+    if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--verbose") == 0) {
         verbose = true;
         argc--;
         argv++;
@@ -35,7 +39,7 @@ int main(int argc, char *argv[]) {
         mode = 2;
     }
     if (mode == 0) {
-        std::cerr << "Incorrect mode or options. --help for more information." << std::endl;
+        std::cerr << "Incorrect arguments. --help for more information." << std::endl;
         return 1;
     }
 
@@ -50,7 +54,7 @@ int main(int argc, char *argv[]) {
         }
     } catch (const std::exception &ex) {
         std::cerr << ex.what() << std::endl;
-        return 1;
+        return 2;
     }
 
     if (verbose) {

@@ -7,9 +7,6 @@
 #include "src/config.h"
 #include "src/utils/utils.h"
 
-// TODO: check cast between char and uchar everywhere
-// TODO: refactor
-
 /***************************** TFrequencyCounter *****************************/
 
 struct TFrequencyCounter {
@@ -64,7 +61,6 @@ struct THuffmanTreeNode {
 
 /********************************** TBitcode *********************************/
 
-//TODO: optimize with deque of ints, it's easy to reverse and convert to string
 class TBitcode {
     static constexpr size_t ALPHA = 1 << 8;
 
@@ -111,9 +107,9 @@ public:
 
     void Restore();
 
-    [[nodiscard]] const char *GetMeta() const; // TODO: ownership?
+    [[nodiscard]] const char *GetMeta() const;
 
-    [[nodiscard]] TNode *GetRoot() const; // TODO: ownership?
+    [[nodiscard]] TNode *GetRoot() const;
 
     [[nodiscard]] TCodesArray GetCodes() const;
 

@@ -3,7 +3,7 @@
 This repo contains library and console utility to encode and decode files
 using Huffman coding algorithm.
 
-WARN: parallel computations are not implemented yet.
+[TODO list](/TODO.md)
 
 # Performance 
 ## Compression

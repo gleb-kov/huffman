@@ -16,12 +16,12 @@ void NHuffmanUtility::Compress(const char *InFile, const char *OutFile,
 
     stageTimer.StartStage();
 
-    uchar RBUF[READ_BUFFER_SIZE];
+    uchar readBuffer[READ_BUFFER_SIZE];
     TFrequencyCounter fc;
 
     while (fin) {
-        fin.read((char *) RBUF, sizeof(RBUF));
-        fc.Update(RBUF, fin.gcount());
+        fin.read((char *) readBuffer, sizeof(readBuffer));
+        fc.Update(readBuffer, fin.gcount());
     }
 
     if (verbose) {
@@ -43,7 +43,7 @@ void NHuffmanUtility::Compress(const char *InFile, const char *OutFile,
     // TODO: compress
 
     /*while (fin) {
-        fin.read((char *) RBUF, sizeof(RBUF));
+        fin.read((char *) readBuffer, sizeof(readBuffer));
         //for (size_t i = 0; i < (size_t) fin.gcount(); i++)
     }*/
 }
@@ -55,10 +55,10 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
 
     stageTimer.StartStage();
 
-    uchar RBUF[META_BUFFER_SIZE];
-    fin.read((char *) RBUF, sizeof(RBUF));
+    uchar readBuffer[META_BUFFER_SIZE];
+    fin.read((char *) readBuffer, sizeof(readBuffer));
 
-    if (fin.gcount() != sizeof(RBUF)) {
+    if (fin.gcount() != sizeof(readBuffer)) {
         throw std::runtime_error("Input file was damaged. Cannot restore Huffman tree.");
     }
 
@@ -68,23 +68,23 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
         PrintStage("read meta and restore Huffman tree", stageTimer);
     }
 
-    TFrequencyStorage fs(RBUF);
+    TFrequencyStorage fs(readBuffer);
     /*THuffmanTree hft(fs);
     auto decoder = TDecodeBuffer<DECODE_BUFFER_SIZE>(hft);
 
     // TODO: untested
     while (fin) {
-        fin.read((char *) RBUF, sizeof(RBUF));
-        decoder.Process(RBUF, fin.gcount());
+        fin.read((char *) readBuffer, sizeof(readBuffer));
+        decoder.Process(readBuffer, fin.gcount());
 
         if (decoder.IsFull()) {
             fout.write(decoder.Get(), decoder.GetSize());
-            decoder.ClearBuffer();
+            decoder.CleareadBufferfer();
         }
     }
 
     while(!decoder.Empty()) {
         fout.write(decoder.Get(), decoder.GetSize());
-        decoder.ClearBuffer();
+        decoder.CleareadBufferfer();
     }*/
 }

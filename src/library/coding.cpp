@@ -11,7 +11,6 @@ using namespace NConfig::NHuffmanCoding;
 void TFrequencyCounter::Update(const uchar *buf, size_t len) {
     Length += len;
     UpdateImpl(buf, len);
-    // TODO: parallel if possible
 }
 
 void TFrequencyCounter::UpdateImpl(const uchar *buf, size_t len) {
@@ -61,7 +60,6 @@ size_t TBitcode::GetSize() const noexcept {
     return Size;
 }
 
-// TODO: rewrite
 size_t TBitcode::operator[](size_t ind) const {
     return Code[ind - 1] ? 1 : 0;
 }
@@ -84,18 +82,15 @@ void TBitcode::Reverse() {
 
 /******************************* THuffmanTree ********************************/
 
-//TODO: check is cnt in size_t?
-
 THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
-    // TODO: refactor
 
     std::array<std::pair<size_t, size_t>, ALPHA> salph = {};
-    for (size_t i = 0; i < ALPHA; i++) { // TODO: WTF
+    for (size_t i = 0; i < ALPHA; i++) {
         salph[i] = {fs[i], i};
         salph[i].second = i;
     }
     std::stable_sort(salph.begin(), salph.end());
-    std::vector<std::pair<uint32_t, std::vector<size_t>>> huff; // TODO
+    std::vector<std::pair<uint32_t, std::vector<size_t>>> huff;
 
     size_t c1 = 0, c2 = 0;
 
