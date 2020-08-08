@@ -16,11 +16,11 @@ void NHuffmanUtility::Compress(const char *InFile, const char *OutFile,
 
     stageTimer.StartStage();
 
-    uchar readBuffer[READ_BUFFER_SIZE];
+    char readBuffer[READ_BUFFER_SIZE];
     TFrequencyCounter fc;
 
     while (fin) {
-        fin.read((char *) readBuffer, sizeof(readBuffer));
+        fin.read(readBuffer, sizeof(readBuffer));
         fc.Update(readBuffer, fin.gcount());
     }
 
@@ -53,8 +53,8 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
 
     stageTimer.StartStage();
 
-    uchar readBuffer[META_BUFFER_SIZE];
-    fin.read((char *) readBuffer, sizeof(readBuffer));
+    char readBuffer[META_BUFFER_SIZE];
+    fin.read(readBuffer, sizeof(readBuffer));
 
     if (fin.gcount() != sizeof(readBuffer)) {
         throw std::runtime_error("Input file was damaged. Cannot restore Huffman tree.");

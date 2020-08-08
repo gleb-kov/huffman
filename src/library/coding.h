@@ -18,10 +18,10 @@ struct TFrequencyCounter {
 
     TFrequencyCounter() = default;
 
-    void Update(const uchar *buf, size_t len);
+    void Update(const char *buf, size_t len);
 
 private:
-    void UpdateImpl(const uchar *buf, size_t len);
+    void UpdateImpl(const char *buf, size_t len);
 };
 
 /***************************** TFrequencyStorage *****************************/
@@ -33,7 +33,7 @@ public:
     explicit TFrequencyStorage(const TFrequencyCounter &);
 
     // used to restore Huffman tree
-    explicit TFrequencyStorage(const uchar *meta);
+    explicit TFrequencyStorage(const char *meta);
 
     // pass buffer ownership
     [[nodiscard]] char *EncodeMeta() const;
@@ -89,7 +89,7 @@ class TBitTree {
     THuffmanTreeNode * State;
 
 public:
-    explicit TBitTree(const std::shared_ptr<THuffmanTreeNode> &root) : Root(root) {}
+    explicit TBitTree(std::shared_ptr<THuffmanTreeNode> &root) : Root(root) {}
 
     ~TBitTree() = default;
 
@@ -155,11 +155,11 @@ public:
 
     [[nodiscard]] const char *GetMeta() const;
 
-    [[nodiscard]] TBitTree GetRoot() const;
+    [[nodiscard]] TBitTree GetRoot();
 
     [[nodiscard]] TCodesArray GetCodes() const;
 
-    [[nodiscard]] TBitCode GetBitcode(uchar symb) const;
+    [[nodiscard]] TBitCode GetBitCode(uchar symb) const;
 };
 
 #endif //HUFFMAN_CODING_H

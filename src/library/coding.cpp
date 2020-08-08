@@ -8,12 +8,12 @@ using namespace NConfig::NHuffmanCoding;
 
 /***************************** TFrequencyCounter *****************************/
 
-void TFrequencyCounter::Update(const uchar *buf, size_t len) {
+void TFrequencyCounter::Update(const char *buf, size_t len) {
     Length += len;
     UpdateImpl(buf, len);
 }
 
-void TFrequencyCounter::UpdateImpl(const uchar *buf, size_t len) {
+void TFrequencyCounter::UpdateImpl(const char *buf, size_t len) {
     size_t it = (len >> 3) << 3;
     for (size_t i = 0; i < it;) {
         ++Count[0][buf[i++]];
@@ -40,7 +40,7 @@ TFrequencyStorage::TFrequencyStorage(const TFrequencyCounter &fc) {
     }
 }
 
-TFrequencyStorage::TFrequencyStorage(const uchar *meta) {
+TFrequencyStorage::TFrequencyStorage(const char *meta) {
     memcpy(Storage.data(), meta, sizeof(Storage));
 }
 
@@ -173,7 +173,7 @@ const char *THuffmanTree::GetMeta() const {
     return Meta;
 }
 
-TBitTree THuffmanTree::GetRoot() const {
+TBitTree THuffmanTree::GetRoot() {
     return TBitTree(Root);
 }
 
@@ -181,6 +181,6 @@ THuffmanTree::TCodesArray THuffmanTree::GetCodes() const {
     return Codes;
 }
 
-TBitCode THuffmanTree::GetBitcode(uchar symb) const {
+TBitCode THuffmanTree::GetBitCode(uchar symb) const {
     return Codes[symb];
 }
