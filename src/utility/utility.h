@@ -10,10 +10,14 @@ namespace NHuffmanUtility {
 
     using namespace NConfig::NHuffmanUtility;
 
-    void Compress(const char *InFile, const char *OutFile);
+    using TBenchStageTimer = NTimeUtils::TStageTimer<BENCHMARK_CLOCK>;
 
-    void Decompress(const char *InFile, const char *OutFile);
+    void Compress(const char *InFile, const char *OutFile,
+                  TBenchStageTimer &stageTimer, bool verbose);
+
+    void Decompress(const char *InFile, const char *OutFile,
+                    TBenchStageTimer &stageTimer, bool verbose);
 
 }
 
-#endif //UFFMAN_UTILITY_DEFS_H
+#endif //HUFFMAN_UTILITY_DEFS_H

@@ -4,7 +4,7 @@
 #include "utils/utils.h"
 
 /*
- * Parallel computations are not implemented yet.
+ * WARN: Parallel computations are not implemented yet.
  * Coding would be paralleled if USE_PARALLEL = true and processed buffer size >= BUFFER_MIN_SIZE
  */
 
@@ -27,11 +27,13 @@ namespace NConfig {
     namespace NHuffmanUtility {
         using NHuffmanCoding::META_BUFFER_SIZE;
 
+        using BENCHMARK_CLOCK = NTimeUtils::BENCHMARK_CLOCK;
+
         constexpr size_t READ_BUFFER_SIZE = 1024;
 
         constexpr size_t DECODE_BUFFER_SIZE = 1024;
 
-        constexpr bool USE_PARALLEL = false; // parallel encoding
+        constexpr bool USE_PARALLEL = false; // encode
     }
 
 }
