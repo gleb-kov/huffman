@@ -4,7 +4,7 @@
 #include "utils/utils.h"
 
 /*
- * Parallel computations is not implemented yet.
+ * Parallel computations are not implemented yet.
  * Coding would be paralleled if USE_PARALLEL = true and processed buffer size >= BUFFER_MIN_SIZE
  */
 

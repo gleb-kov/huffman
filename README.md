@@ -17,5 +17,6 @@ Console utility help info: ```./huffman --help```
 [Config file](/src/config.h)
 
 # Tests
+TODO
 [Tests](/tests/) are implemented using 
 [Google Test framework](https://github.com/google/googletest).
