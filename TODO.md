@@ -22,16 +22,11 @@
 2. Contrib.1.
 3. Parallel execution
 
-## Config
-1. Do something with ALPHA and META_BUFFER_SIZE.
-
 ## Contrib
-1. move timeutils to contrib, because it's another tools project. 
-add contrib header to readme
+1. move NTimeUtils to contrib, because it's another project. add contrib header to readme
 
 ## Tests
-1. Get old tests
-2. Write new tests and check coverage
+1. Write new tests and check coverage
 
 ## Organization
 1. Write README

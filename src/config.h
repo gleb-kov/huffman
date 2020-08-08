@@ -17,16 +17,10 @@ namespace NConfig {
     }
 
     namespace NHuffmanCoding {
-        constexpr size_t ALPHA = 1 << 8;
-
-        constexpr size_t META_BUFFER_SIZE = ALPHA * sizeof(size_t);
-
         constexpr bool USE_PARALLEL = false; // count frequency
     }
 
     namespace NHuffmanUtility {
-        using NHuffmanCoding::META_BUFFER_SIZE;
-
         using BENCHMARK_CLOCK = NTimeUtils::BENCHMARK_CLOCK;
 
         constexpr size_t READ_BUFFER_SIZE = 1024;

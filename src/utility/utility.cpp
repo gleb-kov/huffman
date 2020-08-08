@@ -34,7 +34,7 @@ void NHuffmanUtility::Compress(const char *InFile, const char *OutFile,
 
     TFrequencyStorage fs(fc);
     THuffmanTree hft(fs);
-    fout.write(hft.GetMeta(), META_BUFFER_SIZE);
+    fout.write(hft.GetMeta(), TFrequencyStorage::META_BUFFER_SIZE);
 
     if (verbose) {
         PrintStage("build codes and write meta", stageTimer);
@@ -53,7 +53,7 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
 
     stageTimer.StartStage();
 
-    char readBuffer[META_BUFFER_SIZE];
+    char readBuffer[TFrequencyStorage::META_BUFFER_SIZE];
     fin.read(readBuffer, sizeof(readBuffer));
 
     if (fin.gcount() != sizeof(readBuffer)) {

@@ -4,7 +4,7 @@
 
 #include "coding.h"
 
-using namespace NConfig::NHuffmanCoding;
+constexpr size_t ALPHA = TFrequencyCounter::ALPHA;
 
 /***************************** TFrequencyCounter *****************************/
 

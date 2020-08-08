@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <fstream>
+#include <limits>
 
 using uchar = unsigned char;
 using char8_t = uchar;

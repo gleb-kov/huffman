@@ -12,8 +12,9 @@
 
 struct TFrequencyCounter {
     static constexpr size_t MAGIC = 8;
+    static constexpr size_t ALPHA = std::numeric_limits<uchar>::max();
 
-    size_t Count[MAGIC][NConfig::NHuffmanCoding::ALPHA] = {};
+    size_t Count[MAGIC][ALPHA] = {};
     size_t Length = 0;
 
     TFrequencyCounter() = default;
@@ -27,9 +28,12 @@ private:
 /***************************** TFrequencyStorage *****************************/
 
 class TFrequencyStorage {
-    std::array<size_t, NConfig::NHuffmanCoding::ALPHA> Storage = {};
+    std::array<size_t, TFrequencyCounter::ALPHA> Storage = {};
 
 public:
+    static constexpr size_t META_BUFFER_SIZE =
+            TFrequencyCounter::ALPHA * sizeof(size_t);
+
     explicit TFrequencyStorage(const TFrequencyCounter &);
 
     // used to restore Huffman tree
@@ -44,9 +48,7 @@ public:
 /********************************** TBitCode *********************************/
 
 class TBitCode {
-    static constexpr size_t ALPHA = 1 << 8;
-
-    std::bitset<ALPHA> Code;
+    std::bitset<TFrequencyCounter::ALPHA> Code;
     size_t Size = 0;
 
 public:
@@ -86,7 +88,7 @@ struct THuffmanTreeNode {
 
 class TBitTree {
     std::shared_ptr<THuffmanTreeNode> Root;
-    THuffmanTreeNode * State;
+    THuffmanTreeNode *State;
 
 public:
     explicit TBitTree(std::shared_ptr<THuffmanTreeNode> &root) : Root(root) {}
@@ -131,7 +133,7 @@ public:
 
 class THuffmanTree {
 public:
-    using TCodesArray = std::array<TBitCode, NConfig::NHuffmanCoding::ALPHA>;
+    using TCodesArray = std::array<TBitCode, TFrequencyCounter::ALPHA>;
     using TNode = THuffmanTreeNode;
 
 private:
