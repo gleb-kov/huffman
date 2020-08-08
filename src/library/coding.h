@@ -3,6 +3,7 @@
 
 #include <array>
 #include <bitset>
+#include <memory>
 
 #include "src/config.h"
 #include "src/utils/utils.h"
@@ -40,10 +41,32 @@ public:
     size_t operator[](size_t ind) const;
 };
 
+/********************************** TBitCode *********************************/
+
+class TBitCode {
+    static constexpr size_t ALPHA = 1 << 8;
+
+    std::bitset<ALPHA> Code;
+    size_t Size = 0;
+
+public:
+    TBitCode() = default;
+
+    [[nodiscard]] size_t GetSize() const noexcept;
+
+    size_t operator[](size_t ind) const;
+
+    void SetZero() noexcept;
+
+    void SetOne() noexcept;
+
+    void Reverse();
+};
+
 /***************************** THuffmanTreeNode **************************/
 
 struct THuffmanTreeNode {
-    THuffmanTreeNode *Sub[2];
+    THuffmanTreeNode *Sub[2]; // nobody get direct access
     char Symbol;
     bool IsTerm;
 
@@ -59,43 +82,66 @@ struct THuffmanTreeNode {
     }
 };
 
-/********************************** TBitcode *********************************/
+/********************************** TBitTree *********************************/
 
-class TBitcode {
-    static constexpr size_t ALPHA = 1 << 8;
-
-    std::bitset<ALPHA> Code;
-    size_t Size = 0;
+class TBitTree {
+    std::shared_ptr<THuffmanTreeNode> Root;
+    THuffmanTreeNode * State;
 
 public:
-    TBitcode() = default;
+    explicit TBitTree(const std::shared_ptr<THuffmanTreeNode> &root) : Root(root) {}
 
-    [[nodiscard]] size_t GetSize() const noexcept;
+    ~TBitTree() = default;
 
-    size_t operator[](size_t ind) const;
+    /* Pre: bit equals 0 or 1 */
+    void GoBy(size_t bit) {
+        State = State->Sub[bit];
+    }
 
-    void SetZero() noexcept;
+    void GoByZero() {
+        GoBy(0);
+    }
 
-    void SetOne() noexcept;
+    void GoByOne() {
+        GoBy(1);
+    }
 
-    void Reverse();
+    [[nodiscard]] bool IsValidState() const {
+        // either parent of two subtrees or leaf
+        if (State && State->Sub[0] && State->Sub[1] && !State->IsTerm) {
+            return true;
+        }
+        if (State && !State->Sub[0] && !State->Sub[1] && State->IsTerm) {
+            return true;
+        }
+        return false;
+    }
+
+    [[nodiscard]] bool IsTerm() const {
+        return State->IsTerm;
+    }
+
+    /* Pre: IsTerm == true */
+    [[nodiscard]] char GetSymbol() const {
+        return State->Symbol;
+    }
 };
 
 /******************************* THuffmanTree ********************************/
 
 class THuffmanTree {
 public:
-    using TCodesArray = std::array<TBitcode, NConfig::NHuffmanCoding::ALPHA>;
+    using TCodesArray = std::array<TBitCode, NConfig::NHuffmanCoding::ALPHA>;
     using TNode = THuffmanTreeNode;
 
 private:
     TCodesArray Codes;
 
     // in case of encoding
-    char *Meta = nullptr;
+    char *Meta = nullptr; // no need for smart ptr
 
     // in case of decoding
-    TNode *Root = nullptr;
+    std::shared_ptr<TNode> Root;
 
 private:
     void EncodeMeta(const TFrequencyStorage &);
@@ -109,11 +155,11 @@ public:
 
     [[nodiscard]] const char *GetMeta() const;
 
-    [[nodiscard]] TNode *GetRoot() const;
+    [[nodiscard]] TBitTree GetRoot() const;
 
     [[nodiscard]] TCodesArray GetCodes() const;
 
-    [[nodiscard]] TBitcode GetBitcode(uchar symb) const;
+    [[nodiscard]] TBitCode GetBitcode(uchar symb) const;
 };
 
 #endif //HUFFMAN_CODING_H

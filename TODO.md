@@ -2,9 +2,8 @@
 
 ## Library
 1. Check casts between char and uchar.
-3. Check ownership of Meta and Root in THuffmanTree.
 4. Check if all counters in size_t.
-5. Using perf, measure TBitcode and rewrite with deque of ints if necessary.
+5. Using perf, measure TBitCode and rewrite with deque of ints if necessary.
 6. Using perf, measure constructor of THuffmanTree. Refactor needed.
 7. Refactor.
 8. Parallel count frequency.

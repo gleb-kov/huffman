@@ -64,13 +64,13 @@ public:
 
 template<size_t BUF_SIZE>
 class TDecodeBuffer : public TSimpleCodingBuffer<BUF_SIZE> {
-    THuffmanTreeNode *Root;
+    TBitTree Tree;
 
 public:
     explicit TDecodeBuffer(THuffmanTree &tree)
             : TSimpleCodingBuffer<BUF_SIZE>() {
         tree.Restore();
-        Root = tree.GetRoot();
+        Tree = tree.GetRoot();
     };
 
     void Process(uchar *buf, size_t len) override {

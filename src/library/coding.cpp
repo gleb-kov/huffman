@@ -54,25 +54,25 @@ size_t TFrequencyStorage::operator[](size_t ind) const {
     return Storage[ind];
 }
 
-/********************************** TBitcode *********************************/
+/********************************** TBitCode *********************************/
 
-size_t TBitcode::GetSize() const noexcept {
+size_t TBitCode::GetSize() const noexcept {
     return Size;
 }
 
-size_t TBitcode::operator[](size_t ind) const {
+size_t TBitCode::operator[](size_t ind) const {
     return Code[ind - 1] ? 1 : 0;
 }
 
-void TBitcode::SetZero() noexcept {
+void TBitCode::SetZero() noexcept {
     Size++;
 }
 
-void TBitcode::SetOne() noexcept {
+void TBitCode::SetOne() noexcept {
     Code[Size++] = true;
 }
 
-void TBitcode::Reverse() {
+void TBitCode::Reverse() {
     for (size_t i = 1; i <= Size - i; i++) {
         bool tmp = Code[i - 1];
         Code[i - 1] = Code[Size - i];
@@ -83,12 +83,11 @@ void TBitcode::Reverse() {
 /******************************* THuffmanTree ********************************/
 
 THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
-
     std::array<std::pair<size_t, size_t>, ALPHA> salph = {};
     for (size_t i = 0; i < ALPHA; i++) {
         salph[i] = {fs[i], i};
-        salph[i].second = i;
     }
+
     std::stable_sort(salph.begin(), salph.end());
     std::vector<std::pair<uint32_t, std::vector<size_t>>> huff;
 
@@ -144,7 +143,6 @@ THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
 }
 
 THuffmanTree::~THuffmanTree() {
-    delete Root;
     delete[] Meta;
 }
 
@@ -156,9 +154,9 @@ void THuffmanTree::Restore() {
     if (Root) { // already has tree
         return;
     }
-    Root = new TNode();
+    Root = std::make_shared<TNode>();
     for (size_t i = 0; i < ALPHA; i++) {
-        TNode *cur = Root;
+        TNode *cur = Root.get();
         for (size_t j = 0; j < Codes[i].GetSize(); j++) {
             size_t sub = Codes[i][j];
             if (!cur->Sub[sub]) {
@@ -175,14 +173,14 @@ const char *THuffmanTree::GetMeta() const {
     return Meta;
 }
 
-THuffmanTreeNode *THuffmanTree::GetRoot() const {
-    return Root;
+TBitTree THuffmanTree::GetRoot() const {
+    return TBitTree(Root);
 }
 
 THuffmanTree::TCodesArray THuffmanTree::GetCodes() const {
     return Codes;
 }
 
-TBitcode THuffmanTree::GetBitcode(uchar symb) const {
+TBitCode THuffmanTree::GetBitcode(uchar symb) const {
     return Codes[symb];
 }

@@ -1,6 +1,6 @@
-#include "utility.h"
-
 #include <iostream>
+
+#include "utility.h"
 
 using namespace NHuffmanUtility;
 
