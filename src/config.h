@@ -23,9 +23,9 @@ namespace NConfig {
     namespace NHuffmanUtility {
         using BENCHMARK_CLOCK = NTimeUtils::BENCHMARK_CLOCK;
 
-        constexpr size_t READ_BUFFER_SIZE = 1024;
+        constexpr size_t READ_BUFFER_SIZE = 4096;
 
-        constexpr size_t DECODE_BUFFER_SIZE = 1024;
+        constexpr size_t DECODE_BUFFER_SIZE = 4096;
 
         constexpr bool USE_PARALLEL = false; // encode
     }

@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Сonsole utility for compressing/decompressing files using Huffman coding" << std::endl;
         std::cout << "Github: https://github.com/gleb-kov/huffman" << std::endl << std::endl;
 
-        std::cout << "Usage: [opts] <mode> <input file> <output file>" << std::endl;
+        std::cout << "Usage: [opts] <mode> <input file> <output file>" << std::endl << std::endl;
 
         std::cout << "[opts]:" << std::endl;
         std::cout << "-v, --verbose                 Verbose." << std::endl << std::endl;
