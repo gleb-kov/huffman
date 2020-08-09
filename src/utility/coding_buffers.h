@@ -4,78 +4,143 @@
 #include "src/library/coding.h"
 
 /***************************** TSimpleCodingBuffer ***************************/
+
 /*
  * ONE THREADED ENCODER AND DECODER
  */
 
-
-template<size_t BUF_SIZE>
+template<size_t BUF_SIZE, size_t EXTRA = 0>
 struct TSimpleCodingBuffer {
 protected:
-    char Result[BUF_SIZE] = {};
+    char Result[BUF_SIZE + EXTRA] = {};
     size_t Size = 0;
 
-    uchar *Tail = nullptr;
+    size_t Total = 0;
+    size_t Processed = 0;
+
     size_t TailLen = 0;
+    char *Tail = nullptr;
+
+protected:
+    void SetTail(char *buf, size_t len) {
+        if (len) {
+            Tail = buf;
+            TailLen = len;
+        }
+    }
+
+    void Write(char symbol) {
+        Processed++;
+        if (Processed <= Total) {
+            Result[Size++] = symbol;
+        }
+    }
+
+    bool IsStopped() const {
+        return Processed >= Total;
+    }
+
+    void ProcessTail() {
+        char *tptr = std::exchange(Tail, nullptr);
+        size_t tlen = std::exchange(TailLen, 0);
+        Process(tptr, tlen);
+    }
 
 public:
-    TSimpleCodingBuffer() = default;
+    explicit TSimpleCodingBuffer(size_t total) : Total(total) {}
 
-    virtual void Process(uchar *buf, size_t len) = 0;
+    virtual void Process(char *buf, size_t len) = 0;
 
-    [[nodiscard]] bool Empty() const {
+    bool Empty() const {
         return Size == 0 && TailLen == 0;
     }
 
-    [[nodiscard]] char *Get() {
+    char *Get() {
         return Result;
     }
 
-    [[nodiscard]] size_t GetSize() const {
+    size_t GetSize() const {
         return Size;
     }
 
-    [[nodiscard]] bool IsFull() const {
-        return Size == BUF_SIZE;
+    bool IsFull() const {
+        return Size >= BUF_SIZE;
     }
 
     void ClearBuffer() {
         Size = 0;
-        Process(Tail, TailLen);
+        ProcessTail();
     }
 };
 
 /***************************** TEncodeBuffer *********************************/
 
-template<size_t BUF_SIZE>
-class TEncodeBuffer : public TSimpleCodingBuffer<BUF_SIZE> {
+template<size_t BUF_SIZE, size_t EXTRA = TFrequencyCounter::ALPHA / CHBITS>
+class TEncodeBuffer : public TSimpleCodingBuffer<BUF_SIZE, EXTRA> {
+    static_assert(EXTRA >= TFrequencyCounter::ALPHA / CHBITS);
+
     THuffmanTree::TCodesArray Codes;
+    size_t RemLen = 8;
+    uchar Remainder = 0;
 
 public:
-    TEncodeBuffer(THuffmanTree &tree)
-            : TSimpleCodingBuffer<BUF_SIZE>(), Codes(tree.GetCodes()) {}
+    explicit TEncodeBuffer(THuffmanTree &tree)
+            : TSimpleCodingBuffer<BUF_SIZE, EXTRA>(tree.GetTotal()), Codes(tree.GetCodes()) {}
 
-    void Process(uchar *buf, size_t len) override {
+    void Process(char *buf, size_t len) override {
+        while (len && !this->IsFull() && !this->IsStopped()) {
+            uchar cur = *reinterpret_cast<uchar*>(&buf[0]);
+            for (size_t i = 0; i < Codes[cur].GetSize(); i++) {
+                Remainder <<= 1;
+                Remainder |= Codes[cur][i];
+                RemLen--;
+                if (RemLen == 0) {
+                    this->Write(Remainder);
+                    RemLen = 8;
+                }
+            }
+            len--, buf++;
+        }
+        this->SetTail(buf, len);
+    }
 
+    void SetRemaining() {
+        this->Size = 0;
+        if (RemLen != 8) {
+            Remainder <<= RemLen;
+            this->Write(Remainder);
+        }
     }
 };
 
 /***************************** TDecodeBuffer *********************************/
 
 template<size_t BUF_SIZE>
-class TDecodeBuffer : public TSimpleCodingBuffer<BUF_SIZE> {
+class TDecodeBuffer : public TSimpleCodingBuffer<BUF_SIZE, CHBITS> {
     TBitTree Tree;
+
+    static constexpr uchar MASKS[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 
 public:
     explicit TDecodeBuffer(THuffmanTree &tree)
-            : TSimpleCodingBuffer<BUF_SIZE>() {
-        tree.Restore();
-        Tree = tree.GetRoot();
-    };
+            : TSimpleCodingBuffer<BUF_SIZE, CHBITS>(tree.GetTotal()), Tree(tree.GetRoot()) {}
 
-    void Process(uchar *buf, size_t len) override {
-        // assert(Tail == nullptr); ?? what if call from clear()?
+    void Process(char *buf, size_t len) override {
+        while (len && !this->IsFull() && !this->IsStopped()) {
+            uchar cur = *reinterpret_cast<uchar *>(&buf[0]);
 
+            for (size_t i = 8; i > 0; i--) {
+                uchar m = (cur & MASKS[i - 1]) >> (i - 1);
+                Tree.GoBy(m);
+
+                char symbol = Tree.GetSymbol();
+                if (Tree.IsTerm()) {
+                    this->Write(symbol);
+                }
+            }
+            len--, buf++;
+        }
+        this->SetTail(buf, len);
     }
 };
 

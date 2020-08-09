@@ -4,9 +4,26 @@
 
 using namespace NHuffmanUtility;
 
-void PrintStage(const std::string &stage, TBenchStageTimer &stageTimer) {
-    std::cout << "Stage: " << stage << "; finished in: "
-              << stageTimer.StopStage<std::chrono::milliseconds>().count() << " milliseconds." << std::endl;
+void PrintStage(const std::string &stage, TBenchStageTimer &stageTimer, bool verbose) {
+    if (verbose) {
+        std::cout << "Stage: " << stage << "; finished in: "
+                  << stageTimer.StopStage<std::chrono::milliseconds>().count() << " milliseconds." << std::endl;\
+
+    }
+}
+
+template<size_t READ_BUFFER_SIZE, size_t CODE_BUFFER_SIZE, size_t EXTRA>
+void ProcessFile(std::ifstream &fin, std::ofstream &fout, TSimpleCodingBuffer<CODE_BUFFER_SIZE, EXTRA> &coder,
+                 char *readBuffer) {
+    while (fin) {
+        fin.read(readBuffer, READ_BUFFER_SIZE);
+        coder.Process(readBuffer, fin.gcount());
+
+        while (coder.IsFull()) {
+            fout.write(coder.Get(), coder.GetSize());
+            coder.ClearBuffer();
+        }
+    }
 }
 
 void NHuffmanUtility::Compress(const char *InFile, const char *OutFile,
@@ -14,36 +31,33 @@ void NHuffmanUtility::Compress(const char *InFile, const char *OutFile,
     std::ifstream fin = NFileUtils::OpenInputFile(InFile);
     std::ofstream fout = NFileUtils::OpenOutputFile(OutFile);
 
-    stageTimer.StartStage();
-
     char readBuffer[READ_BUFFER_SIZE];
     TFrequencyCounter fc;
+    stageTimer.StartStage();
 
     while (fin) {
         fin.read(readBuffer, sizeof(readBuffer));
         fc.Update(readBuffer, fin.gcount());
     }
 
-    if (verbose) {
-        PrintStage("calculate frequency", stageTimer);
-    }
+    PrintStage("calculate frequency", stageTimer, verbose);
 
-    // put fin to start of file
-    fin.clear();
-    fin.seekg(0, std::ios::beg);
+    NFileUtils::SetToBegin(fin);
 
     TFrequencyStorage fs(fc);
     THuffmanTree hft(fs);
     fout.write(hft.GetMeta(), TFrequencyStorage::META_BUFFER_SIZE);
 
-    if (verbose) {
-        PrintStage("build codes and write meta", stageTimer);
-    }
+    PrintStage("build codes and write meta", stageTimer, verbose);
 
-    /*while (fin) {
-        fin.read((char *) readBuffer, sizeof(readBuffer));
-        //for (size_t i = 0; i < (size_t) fin.gcount(); i++)
-    }*/
+    auto encoder = TEncodeBuffer<DECODE_BUFFER_SIZE>(hft);
+    ProcessFile<READ_BUFFER_SIZE>(fin, fout, encoder, readBuffer);
+
+    if (!encoder.Empty()) {
+        fout.write(encoder.Get(), encoder.GetSize());
+    }
+    encoder.SetRemaining();
+    fout.write(encoder.Get(), encoder.GetSize());
 }
 
 void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
@@ -55,31 +69,19 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
 
     char readBuffer[TFrequencyStorage::META_BUFFER_SIZE];
     fin.read(readBuffer, sizeof(readBuffer));
-
     if (fin.gcount() != sizeof(readBuffer)) {
         throw std::runtime_error("Input file was damaged. Cannot restore Huffman tree.");
     }
 
-    if (verbose) {
-        PrintStage("read meta and restore Huffman tree", stageTimer);
-    }
+    PrintStage("read meta and restore Huffman tree", stageTimer, verbose);
 
     TFrequencyStorage fs(readBuffer);
-    /*THuffmanTree hft(fs);
+    THuffmanTree hft(fs);
     auto decoder = TDecodeBuffer<DECODE_BUFFER_SIZE>(hft);
+    ProcessFile<TFrequencyStorage::META_BUFFER_SIZE>(fin, fout, decoder, readBuffer);
 
-    while (fin) {
-        fin.read((char *) readBuffer, sizeof(readBuffer));
-        decoder.Process(readBuffer, fin.gcount());
-
-        if (decoder.IsFull()) {
-            fout.write(decoder.Get(), decoder.GetSize());
-            decoder.CleareadBufferfer();
-        }
-    }
-
-    while(!decoder.Empty()) {
+    while (!decoder.Empty()) {
         fout.write(decoder.Get(), decoder.GetSize());
-        decoder.CleareadBufferfer();
-    }*/
+        decoder.ClearBuffer();
+    }
 }

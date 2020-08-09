@@ -127,16 +127,17 @@ void OnTestEnd(bool status) {
 
 bool RunTest(const std::function<void(std::ofstream &)> &supplier, bool small) {
     if (!small && Failed) {
-        std::cout << "Big test wouldn't be launched due some failure before." << std::endl;
-        return true;
+        std::cerr << "Big test wouldn't be launched due some failure before." << std::endl;
+        return false;
     }
     std::ofstream fout(InputFile);
     supplier(fout);
     fout.close();
 
+    bool verbose = !small;
     NHuffmanUtility::TBenchStageTimer stageTimer;
-    NHuffmanUtility::Compress(InputFile, TempFile, stageTimer, true);
-    NHuffmanUtility::Decompress(TempFile, OutputFile, stageTimer, true);
+    NHuffmanUtility::Compress(InputFile, TempFile, stageTimer, verbose);
+    NHuffmanUtility::Decompress(TempFile, OutputFile, stageTimer, verbose);
     //auto finish = stageTimer.StopStage<std::chrono::milliseconds>();
 
     bool status = CompareFiles();
@@ -155,9 +156,9 @@ TEST(full_small, one_letter) {
     auto supplier = [](std::ofstream &fout) { fout << "a"; };
     ASSERT_TRUE(RunTest(supplier, true));
 }
-/*
+
 TEST(full_small, few_letters) {
-    auto supplier = [](std::ofstream &fout) { fout << "abc"; };
+    auto supplier = [](std::ofstream &fout) { fout << "abс"; };
     ASSERT_TRUE(RunTest(supplier, true));
 }
 
@@ -173,11 +174,19 @@ TEST(full_small, visible) {
         fout << "^_`{|}~ \\\\\\\\\\\\\\\\t\\\\\\\\\\\\\\\\n\\\\\\\\\\\\\\\\r\\\\\\\\\\\\\\\\x0b\\\\\\\\\\\\\\\\x0c";
     };
     ASSERT_TRUE(RunTest(supplier, true));
-}*/
+}
+
+TEST(full_small, allchars) {
+    auto supplier = [](std::ofstream &fout) {
+        for (size_t i = 0; i < 256; i++) {
+            fout << (char)(i);
+        }
+    };
+    ASSERT_TRUE(RunTest(supplier, true));
+}
 
 /******************************* medium tests ********************************/
 
-/*
 TEST(full_medium, modulo) {
     auto supplier = [](std::ofstream &fout) {
         for (int i = 0; i < 1000; i++) {
@@ -189,7 +198,7 @@ TEST(full_medium, modulo) {
 
 TEST(full_medium, repeat) {
     auto supplier = [](std::ofstream &fout) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 4097; i++) {
             fout << "aaaa";
         }
     };
@@ -223,23 +232,22 @@ TEST(full_medium, trick_pows) {
         }
     };
     ASSERT_TRUE(RunTest(supplier, false));
-}*/
+}
 
 /******************************* large tests *********************************/
 
-/*
 TEST(full_large, trick_pows) {
     auto supplier = [](std::ofstream &fout) {
         for (size_t i = 0; i < 24; i++) {
             for (size_t j = 0; j <= (size_t) (1ull << i); j++) {
-                fout << (char) (i);
+                fout << (char) ('a' + i);
             }
         }
     };
     ASSERT_TRUE(RunTest(supplier, false));
 }
 
-TEST(full_medium, random) {
+TEST(full_large, random) {
     auto supplier = [](std::ofstream &fout) {
         for (size_t i = 0; i < 100'000'000; i++) {
             fout << (char) (rand() % 256);
@@ -248,7 +256,7 @@ TEST(full_medium, random) {
     ASSERT_TRUE(RunTest(supplier, false));
 }
 
-TEST(full_medium, tree) {
+TEST(full_large, tree) {
     auto supplier = [](std::ofstream &fout) {
         for (size_t i = 0; i < 10'000'000; i++) {
             fout << "abbbbcccccccccccccccc";
@@ -256,7 +264,6 @@ TEST(full_medium, tree) {
     };
     ASSERT_TRUE(RunTest(supplier, false));
 }
-*/
 
 /******************************* validation tests ****************************/
 

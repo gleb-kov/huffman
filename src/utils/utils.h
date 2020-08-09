@@ -6,9 +6,11 @@
 #include <cstdint>
 #include <fstream>
 #include <limits>
+#include <climits>
 
 using uchar = unsigned char;
 using char8_t = uchar;
+constexpr size_t CHBITS = CHAR_BIT;
 
 using i8 = int8_t;
 using i16 = int16_t;
@@ -20,8 +22,10 @@ using ui16 = uint16_t;
 using ui32 = uint32_t;
 using ui64 = uint64_t;
 
+static_assert(CHBITS == 8); // TODO: fix
 static_assert(sizeof(uchar) == 1);
 static_assert(sizeof(size_t) == 8);
+static_assert(sizeof(char) == sizeof(uchar));
 
 namespace NFileUtils {
 
@@ -29,6 +33,9 @@ namespace NFileUtils {
 
     std::ofstream OpenOutputFile(const char *OutFile) noexcept(false);
 
+    void SetToBegin(std::ifstream &);
+
+    // TODO: get file size
 }
 
 namespace NTimeUtils {

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstring>
+#include <deque>
 #include <vector>
 
 #include "coding.h"
@@ -10,10 +11,10 @@ constexpr size_t ALPHA = TFrequencyCounter::ALPHA;
 
 void TFrequencyCounter::Update(const char *buf, size_t len) {
     Length += len;
-    UpdateImpl(buf, len);
+    UpdateImpl((uchar *)buf, len);
 }
 
-void TFrequencyCounter::UpdateImpl(const char *buf, size_t len) {
+void TFrequencyCounter::UpdateImpl(const uchar *buf, size_t len) {
     size_t it = (len >> 3) << 3;
     for (size_t i = 0; i < it;) {
         ++Count[0][buf[i++]];
@@ -38,10 +39,22 @@ TFrequencyStorage::TFrequencyStorage(const TFrequencyCounter &fc) {
             Storage[j] += fc.Count[i][j];
         }
     }
+    CalcTotal();
 }
 
 TFrequencyStorage::TFrequencyStorage(const char *meta) {
     memcpy(Storage.data(), meta, sizeof(Storage));
+    CalcTotal();
+}
+
+void TFrequencyStorage::CalcTotal() {
+    for (size_t i = 0; i < Storage.size(); i++) {
+        Total += Storage[i];
+    }
+}
+
+size_t TFrequencyStorage::GetTotal() const {
+    return Total;
 }
 
 char *TFrequencyStorage::EncodeMeta() const {
@@ -61,7 +74,7 @@ size_t TBitCode::GetSize() const noexcept {
 }
 
 size_t TBitCode::operator[](size_t ind) const {
-    return Code[ind - 1] ? 1 : 0;
+    return Code[ind] ? 1 : 0;
 }
 
 void TBitCode::SetZero() noexcept {
@@ -89,14 +102,16 @@ THuffmanTreeNode::THuffmanTreeNode() {
 }
 
 THuffmanTreeNode::~THuffmanTreeNode() {
-    delete Sub[0];
-    delete Sub[1];
+    if (!IsTerm) {
+        delete Sub[0];
+        delete Sub[1];
+    }
 }
 
 /********************************** TBitTree *********************************/
 
 TBitTree::TBitTree(std::shared_ptr<THuffmanTreeNode> root)
-        : Root(std::move(root)) {}
+        : Root(std::move(root)), State(Root.get()) {}
 
 void TBitTree::GoBy(size_t bit) {
     State = State->Sub[bit];
@@ -110,17 +125,6 @@ void TBitTree::GoByOne() {
     GoBy(1);
 }
 
-bool TBitTree::IsValidState() const {
-    // either parent of two subtrees or leaf
-    if (State && State->Sub[0] && State->Sub[1] && !State->IsTerm) {
-        return true;
-    }
-    if (State && !State->Sub[0] && !State->Sub[1] && State->IsTerm) {
-        return true;
-    }
-    return false;
-}
-
 bool TBitTree::IsTerm() const {
     return State->IsTerm;
 }
@@ -131,7 +135,8 @@ char TBitTree::GetSymbol() const {
 
 /******************************* THuffmanTree ********************************/
 
-THuffmanTree::THuffmanTree(const TFrequencyStorage &fs) {
+THuffmanTree::THuffmanTree(const TFrequencyStorage &fs)
+        : Total(fs.GetTotal()) {
     std::array<std::pair<size_t, size_t>, ALPHA> salph = {};
     for (size_t i = 0; i < ALPHA; i++) {
         salph[i] = {fs[i], i};
@@ -216,6 +221,21 @@ void THuffmanTree::Restore() {
         cur->IsTerm = true;
         cur->Symbol = (char) i;
     }
+
+    // graph closure
+    std::deque<THuffmanTreeNode *> dq = {Root.get()};
+    while (!dq.empty()) {
+        THuffmanTreeNode *cur = dq.front();
+        dq.pop_front();
+
+        if (cur->IsTerm) {
+            cur->Sub[0] = Root->Sub[0];
+            cur->Sub[1] = Root->Sub[1];
+        } else {
+            dq.push_back(cur->Sub[0]);
+            dq.push_back(cur->Sub[1]);
+        }
+    }
 }
 
 const char *THuffmanTree::GetMeta() const {
@@ -223,6 +243,7 @@ const char *THuffmanTree::GetMeta() const {
 }
 
 TBitTree THuffmanTree::GetRoot() {
+    Restore();
     return TBitTree(Root);
 }
 
@@ -230,6 +251,6 @@ THuffmanTree::TCodesArray THuffmanTree::GetCodes() const {
     return Codes;
 }
 
-TBitCode THuffmanTree::GetBitCode(uchar symb) const {
-    return Codes[symb];
+size_t THuffmanTree::GetTotal() const {
+    return Total;
 }

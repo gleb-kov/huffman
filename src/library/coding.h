@@ -12,7 +12,7 @@
 
 struct TFrequencyCounter {
     static constexpr size_t MAGIC = 8;
-    static constexpr size_t ALPHA = std::numeric_limits<uchar>::max();
+    static constexpr size_t ALPHA = std::numeric_limits<uchar>::max() + 1;
 
     size_t Count[MAGIC][ALPHA] = {};
     size_t Length = 0;
@@ -22,13 +22,17 @@ struct TFrequencyCounter {
     void Update(const char *buf, size_t len);
 
 private:
-    void UpdateImpl(const char *buf, size_t len);
+    void UpdateImpl(const uchar *buf, size_t len);
 };
 
 /***************************** TFrequencyStorage *****************************/
 
 class TFrequencyStorage {
     std::array<size_t, TFrequencyCounter::ALPHA> Storage = {};
+    size_t Total = 0;
+
+private:
+    void CalcTotal();
 
 public:
     static constexpr size_t META_BUFFER_SIZE =
@@ -38,6 +42,8 @@ public:
 
     // used to restore Huffman tree
     explicit TFrequencyStorage(const char *meta);
+
+    size_t GetTotal() const;
 
     // pass buffer ownership
     [[nodiscard]] char *EncodeMeta() const;
@@ -54,7 +60,7 @@ class TBitCode {
 public:
     TBitCode() = default;
 
-    [[nodiscard]] size_t GetSize() const noexcept;
+    size_t GetSize() const noexcept;
 
     size_t operator[](size_t ind) const;
 
@@ -95,12 +101,10 @@ public:
 
     void GoByOne();
 
-    [[nodiscard]] bool IsValidState() const;
-
-    [[nodiscard]] bool IsTerm() const;
+    bool IsTerm() const;
 
     /* Pre: IsTerm == true */
-    [[nodiscard]] char GetSymbol() const;
+    char GetSymbol() const;
 };
 
 /******************************* THuffmanTree ********************************/
@@ -113,11 +117,13 @@ public:
 private:
     TCodesArray Codes;
 
-    // in case of encoding
-    char *Meta = nullptr; // no need for smart ptr
-
     // in case of decoding
     std::shared_ptr<TNode> Root;
+
+    size_t Total = 0;
+
+    // in case of encoding
+    char *Meta = nullptr; // no need for smart ptr
 
 private:
     void EncodeMeta(const TFrequencyStorage &);
@@ -129,13 +135,13 @@ public:
 
     void Restore();
 
-    [[nodiscard]] const char *GetMeta() const;
+    const char *GetMeta() const;
 
     [[nodiscard]] TBitTree GetRoot();
 
     [[nodiscard]] TCodesArray GetCodes() const;
 
-    [[nodiscard]] TBitCode GetBitCode(uchar symb) const;
+    size_t GetTotal() const;
 };
 
 #endif //HUFFMAN_CODING_H

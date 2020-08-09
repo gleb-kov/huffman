@@ -4,21 +4,24 @@
 1. Check casts between char and uchar.
 2. Check if all counters in size_t.
 3. Refactor.
-5. Using perf, measure TBitCode and rewrite with deque of ints if necessary.
-6. Using perf, measure constructor of THuffmanTree. Refactor needed.
+4. Using perf, measure TBitCode and rewrite with deque of ints if necessary.
+5. Using perf, measure constructor of THuffmanTree. Refactor needed.
 
 ## Utility
-1. Implement coding buffers.
-2. Using buffers, encode and decode.
-3. Decode validation, sum in meta == length of decoded.
+1. Decode validation, sum in meta == length of decoded.
+2. Refactor + naming.
 4. Choose buffers constants.
-5. Check with sanitizers and Valgrind.
+5. Check with Valgrind.
 
-## Contrib
+## Utils
 1. move NTimeUtils to contrib, because it's another project. add contrib header to readme.
+2. File size
 
 ## Tests
 1. Write new tests and check coverage.
+2. Fix CMakeLists.
 
 ## Organization
 1. Write README.
+2. non 8-bit chars?
+3. dead-code? static analyzer? extra includes? codestyle?

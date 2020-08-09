@@ -17,3 +17,8 @@ std::ofstream NFileUtils::OpenOutputFile(const char *OutFile) noexcept(false) {
     }
     return fout;
 }
+
+void NFileUtils::SetToBegin(std::ifstream &s) {
+    s.clear();
+    s.seekg(0, std::ios::beg);
+}
