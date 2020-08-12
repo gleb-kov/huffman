@@ -8,8 +8,7 @@ Test cases:
 2. English text. Real news articles.
 3. Log files.
 4. <details><summary>Random test cases, contains letters in both cases, numbers, signs.</summary>
-
-Approximate file sizes: 10 KB - 100 KB - 1 MB - 10 MB - 100 MB - 1 GB - 10 GB
+<p>
 
 | Test case | Approximate origin size | Encoded size (bytes) | Saved space | Elapsed time (ms) | Performance (bytes/ms) |
 | --------- | ----------------------- | -------------------- | ----------- | ----------------- | ---------------------- |
@@ -20,7 +19,7 @@ Approximate file sizes: 10 KB - 100 KB - 1 MB - 10 MB - 100 MB - 1 GB - 10 GB
 | Example   | 100 MiB                 | TODO                 | TODO        | TODO              | TODO                   |
 | Example   | 1 GiB                   | TODO                 | TODO        | TODO              | TODO                   |
 | Example   | 10 GiB                  | TODO                 | TODO        | TODO              | TODO                   |
-
+</p>
 </details>
 
 # How to start
