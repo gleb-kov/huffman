@@ -1,6 +1,6 @@
 # Benchmarks
 
-[My machine processor information](processor)
+[My machine processor information](procinfo)
 
 ## Test cases
 
