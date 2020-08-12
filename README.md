@@ -7,7 +7,8 @@ Test cases:
 1. Synthetic tests. Very optimistic test case.
 2. English text. Real news articles.
 3. Log files.
-4. <details><summary>Random test cases, contains letters in both cases, numbers, signs.</summary>
+
+<details><summary>Random test cases, contains letters in both cases, numbers, signs.</summary>
 <p>
 
 | Test case | Approximate origin size | Encoded size (bytes) | Saved space | Elapsed time (ms) | Performance (bytes/ms) |
