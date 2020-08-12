@@ -4,22 +4,65 @@ using Huffman coding algorithm.
 
 # Performance
 Test cases:
-1. Synthetic tests. Very optimistic test case.
-2. English text. Real news articles.
-3. Log files.
-
-<details><summary>Random test cases, contains letters in both cases, numbers, signs.</summary>
+<details><summary>1. Synthetic tests. Very optimistic test case.</summary>
 <p>
 
-| Test case | Approximate origin size | Encoded size (bytes) | Saved space | Elapsed time (ms) | Performance (bytes/ms) |
-| --------- | ----------------------- | -------------------- | ----------- | ----------------- | ---------------------- |
-| Example   | 10 KiB                  | TODO                 | TODO        | TODO              | TODO                   |
-| Example   | 100 KiB                 | TODO                 | TODO        | TODO              | TODO                   |
-| Example   | 1 MiB                   | TODO                 | TODO        | TODO              | TODO                   |
-| Example   | 10 MiB                  | TODO                 | TODO        | TODO              | TODO                   |
-| Example   | 100 MiB                 | TODO                 | TODO        | TODO              | TODO                   |
-| Example   | 1 GiB                   | TODO                 | TODO        | TODO              | TODO                   |
-| Example   | 10 GiB                  | TODO                 | TODO        | TODO              | TODO                   |
+| Approx. origin size | Encoded size | Saved space | Elapsed time (ms) | Performance |
+| ------------------- | ------------ | ----------- | ----------------- | ----------- |
+| 10 KiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 KiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 MiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 MiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 MiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 GiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 GiB              | TODO         | TODO        | TODO              | TODO        |
+
+</p>
+</details>
+<details><summary>2. English text. Real news articles.</summary>
+<p>
+
+| Approx. origin size | Encoded size | Saved space | Elapsed time (ms) | Performance |
+| ------------------- | ------------ | ----------- | ----------------- | ----------- |
+| 10 KiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 KiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 MiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 MiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 MiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 GiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 GiB              | TODO         | TODO        | TODO              | TODO        |
+
+</p>
+</details>
+<details><summary>3. Log files.</summary>
+<p>
+
+| Approx. origin size | Encoded size | Saved space | Elapsed time (ms) | Performance |
+| ------------------- | ------------ | ----------- | ----------------- | ----------- |
+| 10 KiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 KiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 MiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 MiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 MiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 GiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 GiB              | TODO         | TODO        | TODO              | TODO        |
+
+</p>
+</details>
+
+<details><summary>4. Random test cases, contains letters in both cases, numbers, signs.</summary>
+<p>
+
+| Approx. origin size | Encoded size | Saved space | Elapsed time (ms) | Performance |
+| ------------------- | ------------ | ----------- | ----------------- | ----------- |
+| 10 KiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 KiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 MiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 MiB              | TODO         | TODO        | TODO              | TODO        |
+| 100 MiB             | TODO         | TODO        | TODO              | TODO        |
+| 1 GiB               | TODO         | TODO        | TODO              | TODO        |
+| 10 GiB              | TODO         | TODO        | TODO              | TODO        |
+
 </p>
 </details>
 
