@@ -1,6 +1,6 @@
 # Benchmarks
 
-[My machine processor information](/processor)
+[My machine processor information](processor)
 
 ## Test cases
 
@@ -35,7 +35,7 @@ Perfomance on single thread.
 
 </p>
 </details>
-<details><summary>2. English text. Real news articles.</summary>
+<details><summary>2. English text.</summary>
 <p>
 
 | Approx. origin size | Encoded size | Saved space | Elapsed time (ms) | Performance |
