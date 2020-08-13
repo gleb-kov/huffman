@@ -1,5 +1,5 @@
 function helper {
-    echo -e "First argument must be valid test case name:\n\nsynthetic\nenglish\nlogs\nrandom"
+    echo -e "First argument must be valid test case name:\n\nsynthetic\nenglish\nrandom"
     exit 1
 }
 

@@ -1,7 +1,7 @@
 import sys
 
 from phrases import synthetic_phrase, english_phrase
-from streamers import random_streamer, logs_streamer
+from streamers import random_streamer
 
 def check_size(size):
     kib = 1000
@@ -32,9 +32,6 @@ def run_synthetic(fname, size):
 def run_english(fname, size):
     phrase_writer(fname, size, english_phrase())
 
-def run_logs(fname, size):
-    stream_writer(fname, size, logs_streamer)
-
 def run_random(fname, size):
     stream_writer(fname, size, random_streamer)
 
@@ -45,7 +42,6 @@ def runner(mode):
     return {
         'synthetic': run_synthetic,
         'english': run_english,
-        'logs': run_logs,
         'random': run_random
     }.get(mode, failed_mode)
 
@@ -56,7 +52,6 @@ def validate_args():
         print("Modes:")
         print("synthetic")
         print("english")
-        print("logs")
         print("random")
         exit()
 
