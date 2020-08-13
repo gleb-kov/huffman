@@ -28,6 +28,5 @@
 3. dead-code? static analyzer? extra includes? codestyle?
 
 ## Benchmarks
-1. Cleanup in generators, write main wrapper.
 2. Write run.sh .
 2. Run and fill table.
