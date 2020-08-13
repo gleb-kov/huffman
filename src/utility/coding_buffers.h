@@ -130,8 +130,8 @@ public:
             uchar cur = *reinterpret_cast<uchar *>(&buf[0]);
 
             for (size_t i = 8; i > 0; i--) {
-                uchar m = (cur & MASKS[i - 1]) >> (i - 1);
-                Tree.GoBy(m);
+                uchar maskBit = (cur & MASKS[i - 1]) >> (i - 1);
+                Tree.GoBy(maskBit);
 
                 char symbol = Tree.GetSymbol();
                 if (Tree.IsTerm()) {

@@ -8,6 +8,8 @@ using Huffman coding algorithm.
 ## How to start
 Console utility help info: ```./huffman --help```
 
+Example: ```./huffman --compress test.txt out.txt```
+
 [Config file](/src/config.h)
 
 ## Tests
