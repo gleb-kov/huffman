@@ -1,15 +1,15 @@
 # Benchmarks
 
-[My machine processor information](procinfo)
-
 ## Test cases
 
 1. Synthetic. Very optimistic test case. [Generator](generators/phrases.py#L7)
 2. English text. [Generator](generators/phrases.py#L43)
 3. Log files.
-4. Random. Contains letters in both cases, numbers, signs.
+4. Random. Contains letters in both cases, numbers, signs. [Generator](generators/streamers.py#L3)
 
 ## Results
+
+[My machine processor information](procinfo)
 
 Perfomance on single thread.
 
