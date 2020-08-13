@@ -24,14 +24,7 @@ freq_arr = [8.497, 1.492, 2.202, 4.253, 11.162, 2.228, 2.015, 6.094, 7.546,
         9.356, 2.758, 0.978, 2.560, 0.150, 1.994, 0.077]
 
 def get_freq_map(precision):
-    def validate_prec(prec):
-        if prec < 0:
-            return 0
-        if prec > 3:
-            return 3
-        return prec
-
-    precision = validate_prec(precision)
+    precision = min(3, max(precision, 0))
     k = 10 ** precision
 
     result = {}

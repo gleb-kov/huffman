@@ -5,23 +5,8 @@ function helper {
 
 if [ -n "$1" ]
 then
-    case $1 in
-        synthetic)
-	    echo "1"
-            ;;
-        english)
-            echo "2"
-            ;;
-        logs)
-            echo "3"
-            ;;
-        random)
-            echo "4"
-            ;;
-        *)
-            helper
-    esac	   
-#run generator with filename
+    python3 generators/main.py "$1" tmp.txt 100
+#add test size
 #run huffman
 #check if diff is empty
 #ll

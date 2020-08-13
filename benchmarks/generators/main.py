@@ -1,6 +1,7 @@
 import sys
 
 from phrases import synthetic_phrase, english_phrase
+from streamers import random_streamer, logs_streamer
 
 def check_size(size):
     kib = 1000
@@ -17,6 +18,14 @@ def phrase_writer(fname, size, phrase):
             size = size - pl
         fout.write(phrase[0:size])
 
+def stream_writer(fname, size, stream):
+    with open(fname, 'w') as fout:
+        while size > 0:
+            phrase = stream()
+            pl = min(len(phrase), size)
+            fout.write(phrase[0:pl])
+            size = size - pl
+
 def run_synthetic(fname, size):
     phrase_writer(fname, size, synthetic_phrase())
 
@@ -24,10 +33,10 @@ def run_english(fname, size):
     phrase_writer(fname, size, english_phrase())
 
 def run_logs(fname, size):
-    print("Not implemented yet")
+    stream_writer(fname, size, logs_streamer)
 
 def run_random(fname, size):
-    print("Not implemented yet")
+    stream_writer(fname, size, random_streamer)
 
 def failed_mode(fname, size):
     print("UNEXPECTED MODE. Run without args to see help info.")
