@@ -5,7 +5,7 @@
 ## Test cases
 
 1. Synthetic. Very optimistic test case. [Generator](generators/synthetic.py)
-2. English text.
+2. English text. [Generator](generators/english.py)
 3. Log files.
 4. Random. Contains letters in both cases, numbers, signs.
 
