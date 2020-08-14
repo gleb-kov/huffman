@@ -8,13 +8,13 @@
 
 ## How to run
 
-Generate test: 
-1. Go to [generators](generators)
-2. ```python3 main.py <mode> <filename> <test size>```
-
-Run benchmark:
+How to run benchmark:
 1. Build console utility
 2. ```./run.sh <path to utility binary file> <mode> <test size>```
+
+How to use test generator for manual testing:
+1. Go to [generators](generators)
+2. ```python3 main.py <mode> <filename> <test size>```
 
 ## Results
 
