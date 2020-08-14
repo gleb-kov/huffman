@@ -5,7 +5,7 @@ import random
 ################################### SYNTHETIC ############################
 
 def synthetic_phrase():
-    return 'a'
+    return 'aaaaaaaaaaaaaaaa' # just for speedup?
 
 ################################### ENGLISH ##############################
 
