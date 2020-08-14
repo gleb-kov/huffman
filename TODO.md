@@ -23,5 +23,4 @@
 3. static analyzer?
 
 ## Benchmarks
-2. Write run.sh.
 2. Run and fill table.
