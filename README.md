@@ -2,9 +2,6 @@
 This repo contains library and console utility to encode and decode files
 using Huffman coding algorithm.
 
-## Performance
-[Benchmarks](/benchmarks) with full information and generators.
-
 ## How to start
 Console utility help info: ```./huffman --help```
 
@@ -12,10 +9,14 @@ Example: ```./huffman --compress test.txt out.txt```
 
 [Config file](/src/config.h)
 
+## Performance
+[Benchmarks](/benchmarks) with full information and generators.
+
 ## Tests
 [Tests](/tests) are implemented using [GTest](https://github.com/google/googletest).
 
 ## Plans
-1. [TODO list with fixes](/TODO.md)
-2. Parallel execution
-3. Work with directories
+1. [TODO list with fixes](/TODO.md).
+2. Fix space overhead on tiny files.
+2. Parallel execution.
+3. Work with directories.

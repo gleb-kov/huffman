@@ -19,8 +19,8 @@
 2. Fix CMakeLists.
 
 ## Organization
-2. non 8-bit chars?
+1. non 8-bit chars?
 3. static analyzer?
 
 ## Benchmarks
-2. Run and fill table.
+1. Run and fill table.

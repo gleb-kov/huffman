@@ -14,4 +14,4 @@ for i in range(dletter_coef):
 
 def random_streamer():
     sample = ''.join(random.sample(SIMULATION, len(SIMULATION)))
-    return sample[0:16]
+    return sample[0:64]
