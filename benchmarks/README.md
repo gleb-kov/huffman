@@ -34,7 +34,6 @@ Perfomance on single thread.
 | 1 MiB               | 130 KiB      | 87       | TODO            | TODO         | TODO            | TODO         |
 | 10 MiB              | 1.3 MiB      | 87       | TODO            | TODO         | TODO            | TODO         |
 | 100 MiB             | 13 MiB       | 87       | TODO            | TODO         | TODO            | TODO         |
-| 1 GiB               | 129 MiB      | 87       | TODO            | TODO         | TODO            | TODO         |
 
 </p>
 </details>
@@ -50,7 +49,6 @@ Perfomance on single thread.
 | 1 MiB               | 542 KiB      | 45       | TODO            | TODO         | TODO            | TODO         |
 | 10 MiB              | 5.3 MiB      | 47       | TODO            | TODO         | TODO            | TODO         |
 | 100 MiB             | 53 MiB       | 47       | TODO            | TODO         | TODO            | TODO         |
-| 1 GiB               | 540 MiB      | 46       | TODO            | TODO         | TODO            | TODO         |
 
 </p>
 </details>

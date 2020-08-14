@@ -3,9 +3,9 @@
 ## Library
 1. Check casts between char and uchar.
 2. Check if all counters in size_t.
-3. Refactor.
 4. Using perf, measure TBitCode and rewrite with deque of ints if necessary.
-5. Using perf, measure constructor of THuffmanTree. Refactor needed.
+5. Using perf, measure constructor of THuffmanTree.
+3. Refactor.
 
 ## Utility
 1. Decode validation, sum in meta == length of decoded.
