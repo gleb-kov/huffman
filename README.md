@@ -19,4 +19,5 @@ Example: ```./huffman --compress test.txt out.txt```
 1. [TODO list with fixes](/TODO.md).
 2. Fix space overhead on tiny files.
 2. Parallel execution.
+2. Compressed pattern matching.
 3. Work with directories.
