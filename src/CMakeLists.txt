@@ -6,19 +6,18 @@ set(SRC_UTILS
         ${SRC_DIR}/utils/utils.h
         ${SRC_DIR}/utils/utils.cpp)
 
-set(SRC_UTILITY
+set(SRC_LIB
         ${SRC_DIR}/library/coding.h
-        ${SRC_DIR}/library/coding.cpp
+        ${SRC_DIR}/library/coding.cpp)
 
+set(SRC_UTILITY
         ${SRC_DIR}/utility/main.cpp
         ${SRC_DIR}/utility/coding_buffers.h
         ${SRC_DIR}/utility/utility.h
         ${SRC_DIR}/utility/utility.cpp)
 
-add_subdirectory(library)
-
-add_executable(huffman config.h ${SRC_UTILITY} ${SRC_UTILS})
-target_link_libraries(huffman huflib stdc++fs)
+add_executable(huffman config.h ${SRC_UTILS} ${SRC_LIB} ${SRC_UTILITY})
+target_link_libraries(huffman stdc++fs)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++17 -pedantic -O2")

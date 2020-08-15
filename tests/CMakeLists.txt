@@ -4,13 +4,14 @@ add_executable(tests
         ${SRC_DIR}/utils/utils.h
         ${SRC_DIR}/utils/utils.cpp
 
+        ${SRC_DIR}/library/coding.h
+        ${SRC_DIR}/library/coding.cpp
+
         ${SRC_DIR}/utility/coding_buffers.h
         ${SRC_DIR}/utility/utility.h
         ${SRC_DIR}/utility/utility.cpp
 
         ${GTEST_DIR})
-
-target_link_libraries(tests huflib)
 
 if (UNIX AND NOT APPLE)
     target_link_libraries(tests pthread)

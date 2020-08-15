@@ -11,12 +11,14 @@
 namespace NConfig {
 
     namespace NParallelUtils {
+        // unused now, for future updates
         constexpr size_t THREADS_CNT = 8;
 
         constexpr size_t BUFFER_MIN_SIZE = 4096000;
     }
 
     namespace NHuffmanCoding {
+        // unused now, for future updates
         constexpr bool USE_PARALLEL = false; // count frequency
     }
 
@@ -27,6 +29,7 @@ namespace NConfig {
 
         constexpr size_t DECODE_BUFFER_SIZE = 4096;
 
+        // unused now, for future updates
         constexpr bool USE_PARALLEL = false; // encode
     }
 
