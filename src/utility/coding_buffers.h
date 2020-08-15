@@ -13,10 +13,10 @@ template<size_t BUF_SIZE, size_t EXTRA = 0>
 struct TSimpleCodingBuffer {
 protected:
     char Result[BUF_SIZE + EXTRA] = {};
-    size_t Size = 0;
 
-    size_t Total = 0;
+    const size_t Total = 0;
     size_t Processed = 0;
+    size_t Size = 0;
 
     size_t TailLen = 0;
     char *Tail = nullptr;
@@ -121,6 +121,8 @@ class TDecodeBuffer : public TSimpleCodingBuffer<BUF_SIZE, CHBITS> {
 
     static constexpr uchar MASKS[8] = {1, 2, 4, 8, 16, 32, 64, 128};
 
+    bool Valid = true;
+
 public:
     explicit TDecodeBuffer(THuffmanTree &tree)
             : TSimpleCodingBuffer<BUF_SIZE, CHBITS>(tree.GetTotal()), Tree(tree.GetRoot()) {}
@@ -140,7 +142,14 @@ public:
             }
             len--, buf++;
         }
+        if (this->IsStopped() && len > 0) {
+            Valid = false;
+        }
         this->SetTail(buf, len);
+    }
+
+    bool IsValid() const {
+        return Valid;
     }
 };
 

@@ -52,7 +52,7 @@ void TFrequencyStorage::CalcTotal() {
     }
 }
 
-size_t TFrequencyStorage::GetTotal() const {
+size_t TFrequencyStorage::GetTotal() const noexcept {
     return Total;
 }
 
@@ -72,7 +72,7 @@ size_t TBitCode::GetSize() const noexcept {
     return Size;
 }
 
-size_t TBitCode::operator[](size_t ind) const {
+uchar TBitCode::operator[](size_t ind) const {
     return Code[ind] ? 1 : 0;
 }
 
@@ -112,7 +112,7 @@ THuffmanTreeNode::~THuffmanTreeNode() {
 TBitTree::TBitTree(std::shared_ptr<THuffmanTreeNode> root)
         : Root(std::move(root)), State(Root.get()) {}
 
-void TBitTree::GoBy(size_t bit) {
+void TBitTree::GoBy(uchar bit) {
     State = State->Sub[bit];
 }
 

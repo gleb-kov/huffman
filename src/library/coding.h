@@ -43,7 +43,7 @@ public:
     // used to restore Huffman tree
     explicit TFrequencyStorage(const char *meta);
 
-    size_t GetTotal() const;
+    size_t GetTotal() const noexcept;
 
     // pass buffer ownership
     [[nodiscard]] char *EncodeMeta() const;
@@ -62,7 +62,7 @@ public:
 
     size_t GetSize() const noexcept;
 
-    size_t operator[](size_t ind) const;
+    uchar operator[](size_t ind) const;
 
     void SetZero() noexcept;
 
@@ -95,7 +95,7 @@ public:
     ~TBitTree() = default;
 
     /* Pre: bit equals 0 or 1 */
-    void GoBy(size_t bit);
+    void GoBy(uchar bit);
 
     bool IsTerm() const;
 
@@ -116,10 +116,10 @@ private:
     // in case of decoding
     std::shared_ptr<TNode> Root;
 
-    size_t Total = 0;
-
     // in case of encoding
     char *Meta = nullptr; // no need for smart ptr
+
+    size_t Total = 0;
 
 private:
     void EncodeMeta(const TFrequencyStorage &);
@@ -131,11 +131,11 @@ public:
 
     void Restore();
 
-    const char *GetMeta() const;
+    [[nodiscard]] TCodesArray GetCodes() const;
 
     [[nodiscard]] TBitTree GetRoot();
 
-    [[nodiscard]] TCodesArray GetCodes() const;
+    const char *GetMeta() const;
 
     size_t GetTotal() const;
 };

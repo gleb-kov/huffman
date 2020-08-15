@@ -22,7 +22,7 @@ using ui16 = uint16_t;
 using ui32 = uint32_t;
 using ui64 = uint64_t;
 
-static_assert(CHBITS == 8); // TODO: fix
+static_assert(CHBITS == 8); // a lot of invariants on this state
 static_assert(sizeof(uchar) == 1);
 static_assert(sizeof(size_t) == 8);
 static_assert(sizeof(char) == sizeof(uchar));

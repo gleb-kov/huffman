@@ -12,10 +12,10 @@ namespace NHuffmanUtility {
 
     using TBenchStageTimer = NTimeUtils::TStageTimer<BENCHMARK_CLOCK>;
 
-    void Compress(const char *InFile, const char *OutFile,
+    void Compress(const char *inFile, const char *outFile,
                   TBenchStageTimer &stageTimer, bool verbose);
 
-    void Decompress(const char *InFile, const char *OutFile,
+    void Decompress(const char *inFile, const char *outFile,
                     TBenchStageTimer &stageTimer, bool verbose);
 
 }

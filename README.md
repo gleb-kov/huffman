@@ -17,7 +17,9 @@ Example: ```./huffman --compress test.txt out.txt```
 
 ## Plans
 1. [TODO list with fixes](/TODO.md).
-2. Fix space overhead on tiny files.
+2. Fix space overhead on tiny files 
+    (do not encode files less than 1 KiB, 
+    spend less bytes for meta information in file begin)
 2. Parallel execution.
 2. Compressed pattern matching.
 3. Work with directories.

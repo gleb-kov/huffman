@@ -81,7 +81,7 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
 
     char readBuffer[READ_BUFFER_SIZE];
     fin.read(readBuffer, sizeof(readBuffer));
-    if (fin.gcount() < TFrequencyStorage::META_BUFFER_SIZE) {
+    if (fin.gcount() < (i64) TFrequencyStorage::META_BUFFER_SIZE) {
         throw std::runtime_error("Input file was damaged. Cannot restore Huffman tree.");
     }
 
@@ -100,5 +100,9 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
     while (!decoder.Empty()) {
         fout.write(decoder.Get(), decoder.GetSize());
         decoder.ClearBuffer();
+    }
+
+    if (!decoder.IsValid()) {
+        throw std::runtime_error("Origin file was damaged.");
     }
 }
