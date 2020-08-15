@@ -88,7 +88,7 @@ public:
             : TSimpleCodingBuffer<BUF_SIZE, EXTRA>(tree.GetTotal()), Codes(tree.GetCodes()) {}
 
     void Process(char *buf, size_t len) override {
-        while (len && !this->IsFull() && !this->IsStopped()) {
+        while (len && !this->IsFull()) {
             uchar cur = *reinterpret_cast<uchar*>(&buf[0]);
             for (size_t i = 0; i < Codes[cur].GetSize(); i++) {
                 Remainder <<= 1;
@@ -118,9 +118,6 @@ public:
 template<size_t BUF_SIZE>
 class TDecodeBuffer : public TSimpleCodingBuffer<BUF_SIZE, CHBITS> {
     TBitTree Tree;
-
-    static constexpr uchar MASKS[8] = {1, 2, 4, 8, 16, 32, 64, 128};
-
     bool Valid = true;
 
 public:
@@ -128,14 +125,12 @@ public:
             : TSimpleCodingBuffer<BUF_SIZE, CHBITS>(tree.GetTotal()), Tree(tree.GetRoot()) {}
 
     void Process(char *buf, size_t len) override {
-        while (len && !this->IsFull() && !this->IsStopped()) {
+        while (len && !this->IsFull()) {
             uchar cur = *reinterpret_cast<uchar *>(&buf[0]);
-
             for (size_t i = 8; i > 0; i--) {
-                uchar maskBit = (cur & MASKS[i - 1]) >> (i - 1);
-                Tree.GoBy(maskBit);
-
-                char symbol = Tree.GetSymbol();
+                uchar maskBit = (cur & 0x80) >> 7; // take left bit
+                cur <<= 1;
+                char symbol = Tree.GoBy(maskBit);
                 if (Tree.IsTerm()) {
                     this->Write(symbol);
                 }

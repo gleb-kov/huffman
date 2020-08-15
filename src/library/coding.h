@@ -95,11 +95,10 @@ public:
     ~TBitTree() = default;
 
     /* Pre: bit equals 0 or 1 */
-    void GoBy(uchar bit);
+    char GoBy(uchar bit);
 
     bool IsTerm() const;
 
-    /* Pre: IsTerm == true */
     char GetSymbol() const;
 };
 

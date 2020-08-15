@@ -112,8 +112,9 @@ THuffmanTreeNode::~THuffmanTreeNode() {
 TBitTree::TBitTree(std::shared_ptr<THuffmanTreeNode> root)
         : Root(std::move(root)), State(Root.get()) {}
 
-void TBitTree::GoBy(uchar bit) {
+char TBitTree::GoBy(uchar bit) {
     State = State->Sub[bit];
+    return State->Symbol;
 }
 
 bool TBitTree::IsTerm() const {
@@ -203,7 +204,7 @@ void THuffmanTree::Restore() {
     for (size_t i = 0; i < ALPHA; i++) {
         TNode *cur = Root.get();
         for (size_t j = 0; j < Codes[i].GetSize(); j++) {
-            size_t sub = Codes[i][j];
+            uchar sub = Codes[i][j];
             if (!cur->Sub[sub]) {
                 cur->Sub[sub] = new TNode;
             }

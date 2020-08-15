@@ -7,6 +7,9 @@ set(SRC_UTILS
         ${SRC_DIR}/utils/utils.cpp)
 
 set(SRC_UTILITY
+        ${SRC_DIR}/library/coding.h
+        ${SRC_DIR}/library/coding.cpp
+
         ${SRC_DIR}/utility/main.cpp
         ${SRC_DIR}/utility/coding_buffers.h
         ${SRC_DIR}/utility/utility.h
