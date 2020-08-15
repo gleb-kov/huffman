@@ -15,7 +15,7 @@ set(UTILITY
 add_subdirectory(library)
 
 add_executable(huffman config.h ${UTILITY} ${UTILS})
-target_link_libraries(huffman huflib)
+target_link_libraries(huffman huflib stdc++fs)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++17 -pedantic -O2")

@@ -1,21 +1,15 @@
 # TODO list
 
-## Utils
-1. Add SinceInit() to TStageTimer
-
 ## Library
 1. Check casts between char and uchar.
 2. Check if all counters in size_t.
 4. Using perf, measure TBitCode and rewrite with deque of ints if necessary.
-5. Using perf, measure constructor of THuffmanTree.
 6. Measure profit of coding tree closure.
 3. Refactor.
 
 ## Utility
 1. Decode validation, sum in meta == length of decoded.
 4. Choose buffers constants.
-5. Check with Valgrind.
-6. File size in verbose mode.
 2. Refactor.
 
 ## Tests

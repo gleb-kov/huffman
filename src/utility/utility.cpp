@@ -7,8 +7,15 @@ using namespace NHuffmanUtility;
 void PrintStage(const std::string &stage, TBenchStageTimer &stageTimer, bool verbose) {
     if (verbose) {
         std::cout << "Stage: " << stage << "; finished in: "
-                  << stageTimer.StopStage<std::chrono::milliseconds>().count() << " milliseconds." << std::endl;\
+                  << stageTimer.StopStage<std::chrono::milliseconds>().count() << " milliseconds." << std::endl;
+    }
+}
 
+// just for manual testing
+void PrintSinceStart(TBenchStageTimer &stageTimer, bool verbose) {
+    if (verbose) {
+        std::cout << "Elapsed since start:"
+                  << stageTimer.SinceInit<std::chrono::milliseconds>().count() << " milliseconds." << std::endl;
     }
 }
 
@@ -78,13 +85,15 @@ void NHuffmanUtility::Decompress(const char *InFile, const char *OutFile,
         throw std::runtime_error("Input file was damaged. Cannot restore Huffman tree.");
     }
 
-    PrintStage("read meta and restore Huffman tree", stageTimer, verbose);
-
     TFrequencyStorage fs(readBuffer);
     THuffmanTree hft(fs);
-    auto decoder = TDecodeBuffer<DECODE_BUFFER_SIZE>(hft);
+    hft.Restore(); // just for fair verbose output, it could be removed, because GetRoot() is safe
 
-    decoder.Process(readBuffer + TFrequencyStorage::META_BUFFER_SIZE, fin.gcount() - TFrequencyStorage::META_BUFFER_SIZE);
+    PrintStage("read meta and restore Huffman tree", stageTimer, verbose);
+
+    auto decoder = TDecodeBuffer<DECODE_BUFFER_SIZE>(hft);
+    decoder.Process(readBuffer + TFrequencyStorage::META_BUFFER_SIZE,
+                    fin.gcount() - TFrequencyStorage::META_BUFFER_SIZE);
     ProcessFilledBuffer(fout, decoder);
     ProcessFile<sizeof(readBuffer)>(fin, fout, decoder, readBuffer);
 

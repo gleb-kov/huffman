@@ -1,7 +1,15 @@
-#include <iostream>
 #include <cstring>
+#include <experimental/filesystem>
+#include <iostream>
 
 #include "utility.h"
+
+// it's not in utils due to linkage with fs
+uintmax_t FileSizeBytes(const char *file) noexcept(false) {
+    namespace fs = std::experimental::filesystem;
+    fs::path fsp = file;
+    return fs::file_size(fsp);
+}
 
 int main(int argc, char *argv[]) {
     if (argc == 2 && strcmp(argv[1], "--help") == 0) {
@@ -44,7 +52,6 @@ int main(int argc, char *argv[]) {
     }
 
     NHuffmanUtility::TBenchStageTimer stageTimer;
-    auto startTime = stageTimer.GetStageStart();
 
     try {
         if (mode == 1) {
@@ -58,8 +65,22 @@ int main(int argc, char *argv[]) {
     }
 
     if (verbose) {
-        auto elapsedMs = stageTimer.DurationSince<std::chrono::milliseconds>(startTime);
+        auto elapsedMs = stageTimer.SinceInit<std::chrono::milliseconds>();
         std::cout << "Finished in " << std::fixed << elapsedMs.count() << " milliseconds." << std::endl;
+    }
+
+    if (verbose && mode == 1) {
+        std::cout << std::endl << "Compare file size:" << std::endl;
+        uintmax_t before = FileSizeBytes(argv[2]);
+        uintmax_t after = FileSizeBytes(argv[3]);
+        std::cout << "Origin (" << argv[2] << "): " << before << " bytes" << std::endl;
+        std::cout << "Encoded (" << argv[3] << "): " << after << " bytes" << std::endl;
+        if (before >= after) {
+            std::cout << "Saved space: " << (before - after) * 100.0 / before << "%";
+        } else {
+            std::cout << "Space overhead detected. It happens when origin file is too small.";
+        }
+        std::cout << std::endl;
     }
 
     return 0;

@@ -27,15 +27,16 @@ static_assert(sizeof(uchar) == 1);
 static_assert(sizeof(size_t) == 8);
 static_assert(sizeof(char) == sizeof(uchar));
 
+template<typename T>
+constexpr T Max = std::numeric_limits<T>::max();
+
 namespace NFileUtils {
 
-    std::ifstream OpenInputFile(const char *InFile) noexcept(false);
+    std::ifstream OpenInputFile(const char *inFile) noexcept(false);
 
-    std::ofstream OpenOutputFile(const char *OutFile) noexcept(false);
+    std::ofstream OpenOutputFile(const char *outFile) noexcept(false);
 
     void SetToBegin(std::ifstream &);
-
-    // TODO: get file size
 }
 
 namespace NTimeUtils {
@@ -46,26 +47,28 @@ namespace NTimeUtils {
     class TStageTimer {
         using TPoint = std::chrono::time_point<Clock>;
         TPoint Snapshot;
+        TPoint InitPoint;
+
     public:
         /* util functions that might be useful and compact */
 
-        static TPoint Now() noexcept {
+        [[nodiscard]] static TPoint Now() noexcept {
             return Clock::now();
         }
 
         template<typename T>
-        static auto Duration(TPoint finish, TPoint start) {
+        [[nodiscard]] static auto Duration(TPoint finish, TPoint start) {
             return std::chrono::duration_cast<T>(finish - start);
         }
 
         template<typename T>
-        static auto DurationSince(TPoint point) {
+        [[nodiscard]] static auto DurationSince(TPoint point) {
             return Duration<T>(Now(), point);
         }
 
     public:
         TStageTimer() noexcept {
-            StartStage();
+            InitPoint = StartStage();
         }
 
         TPoint GetStageStart() const noexcept {
@@ -77,9 +80,14 @@ namespace NTimeUtils {
             return Snapshot;
         }
 
+        template<typename T>
+        [[nodiscard]] auto SinceInit() const {
+            return DurationSince<T>(InitPoint);
+        }
+
         /* stage is still going, do not update snapshot */
         template<typename T>
-        auto GetDuration() const {
+        [[nodiscard]] auto GetDuration() const {
             return DurationSince<T>(Snapshot);
         }
 

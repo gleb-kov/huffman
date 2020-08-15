@@ -97,10 +97,6 @@ public:
     /* Pre: bit equals 0 or 1 */
     void GoBy(size_t bit);
 
-    void GoByZero();
-
-    void GoByOne();
-
     bool IsTerm() const;
 
     /* Pre: IsTerm == true */

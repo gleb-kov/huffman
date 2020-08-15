@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <cstring>
 #include <deque>
-#include <vector>
 
 #include "coding.h"
 
@@ -117,14 +116,6 @@ void TBitTree::GoBy(size_t bit) {
     State = State->Sub[bit];
 }
 
-void TBitTree::GoByZero() {
-    GoBy(0);
-}
-
-void TBitTree::GoByOne() {
-    GoBy(1);
-}
-
 bool TBitTree::IsTerm() const {
     return State->IsTerm;
 }
@@ -143,12 +134,12 @@ THuffmanTree::THuffmanTree(const TFrequencyStorage &fs)
     }
 
     std::stable_sort(salph.begin(), salph.end());
-    std::vector<std::pair<uint32_t, std::vector<size_t>>> huff;
+    std::deque<std::pair<ui64, std::deque<size_t>>> huff;
 
     size_t c1 = 0, c2 = 0;
 
     while (c1 < ALPHA || c2 < huff.size()) {
-        uint32_t w1 = UINT32_MAX, w2 = UINT32_MAX, w3 = UINT32_MAX;
+        ui64 w1 = Max<ui64>, w2 = Max<ui64>, w3 = Max<ui64>;
 
         if (c1 + 1 < salph.size()) {
             w1 = salph[c1].first + salph[c1 + 1].first;
@@ -166,14 +157,13 @@ THuffmanTree::THuffmanTree(const TFrequencyStorage &fs)
             Codes[salph[c1 + 1].second].SetOne();
             c1 += 2;
         } else if (w2 <= w1 && w2 <= w3 && c1 < salph.size() && c2 < huff.size()) {
-            huff.push_back({w2, huff[c2].second});
+            huff.emplace_back(w2, huff[c2].second);
             huff.back().second.push_back(salph[c1].second);
             Codes[salph[c1].second].SetOne();
-            for (size_t i = 0; i < huff[c2].second.size(); i++) {
-                Codes[huff[c2].second[i]].SetZero();
+            for (size_t i : huff[c2].second) {
+                Codes[i].SetZero();
             }
-            c1++;
-            c2++;
+            c1++, c2++;
         } else if (c2 + 1 < huff.size()) {
             huff.push_back({w3, {}});
             for (size_t i = 0; i < huff[c2].second.size(); i++) {
@@ -193,6 +183,7 @@ THuffmanTree::THuffmanTree(const TFrequencyStorage &fs)
     for (auto &code : Codes) {
         code.Reverse();
     }
+
     EncodeMeta(fs);
 }
 

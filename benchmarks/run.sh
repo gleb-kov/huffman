@@ -16,7 +16,7 @@ if [ -n "$1" ] && [ -n "$2" ] && [ -n "$3" ]; then
     echo "--------------------------- Check diff ---------------------------"
     DIFFSIZE=$(diff test.txt decoded.txt | wc -l)
     if [ "$DIFFSIZE" -eq 0 ]; then
-        echo "Everything is okay. Check saved space:"
+        echo "Everything is OK. Check saved space (ls -lh dump):"
         ls -lh test.txt encoded.txt
         rm -r test.txt encoded.txt decoded.txt generators/__pycache__
     else
