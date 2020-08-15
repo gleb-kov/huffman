@@ -1,14 +1,14 @@
 add_executable(tests
         main.cpp
 
-        ../src/utils/utils.h
-        ../src/utils/utils.cpp
+        ${SRC_DIR}/utils/utils.h
+        ${SRC_DIR}/utils/utils.cpp
 
-        ../src/utility/coding_buffers.h
-        ../src/utility/utility.h
-        ../src/utility/utility.cpp
+        ${SRC_DIR}/utility/coding_buffers.h
+        ${SRC_DIR}/utility/utility.h
+        ${SRC_DIR}/utility/utility.cpp
 
-        ${GTEST_SRC})
+        ${GTEST_DIR})
 
 target_link_libraries(tests huflib)
 

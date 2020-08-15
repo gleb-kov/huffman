@@ -2,19 +2,19 @@ cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(UTILS
-        utils/utils.h
-        utils/utils.cpp)
+set(SRC_UTILS
+        ${SRC_DIR}/utils/utils.h
+        ${SRC_DIR}/utils/utils.cpp)
 
-set(UTILITY
-        utility/main.cpp
-        utility/coding_buffers.h
-        utility/utility.h
-        utility/utility.cpp)
+set(SRC_UTILITY
+        ${SRC_DIR}/utility/main.cpp
+        ${SRC_DIR}/utility/coding_buffers.h
+        ${SRC_DIR}/utility/utility.h
+        ${SRC_DIR}/utility/utility.cpp)
 
 add_subdirectory(library)
 
-add_executable(huffman config.h ${UTILITY} ${UTILS})
+add_executable(huffman config.h ${SRC_UTILITY} ${SRC_UTILS})
 target_link_libraries(huffman huflib stdc++fs)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
