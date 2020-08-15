@@ -149,7 +149,7 @@ public:
     }
 
     bool IsValid() const {
-        return Valid;
+        return Valid && this->Processed >= this->Total;
     }
 };
 
