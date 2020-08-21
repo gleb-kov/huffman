@@ -11,8 +11,7 @@
 
 How to run benchmark:
 
-```./run.sh <path to utility binary file> <mode> <test size>``` 
-    (path to console utility binary file)
+```./run.sh <path> <mode> <test size>``` (path to console utility binary file)
 
 How to use test generator for manual testing:
 
