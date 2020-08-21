@@ -1,7 +1,6 @@
 import sys
 
-from phrases import synthetic_phrase, english_phrase
-from streamers import random_streamer
+from gen import synthetic_phrase, english_phrase, random_phrase
 
 def check_size(size):
     kib = 1000
@@ -10,30 +9,25 @@ def check_size(size):
     if size < kib or size > gib:
         print("Unusual test size. File would be generated no matter what.")
 
-def phrase_writer(fname, size, phrase):
-    with open(fname, 'w') as fout:
-        pl = len(phrase)
-        while size >= pl:
-            fout.write(phrase)
-            size = size - pl
-        fout.write(phrase[0:size])
+def test_writer(fname, size, stream):
+    batch = 5
 
-def stream_writer(fname, size, stream):
     with open(fname, 'w') as fout:
         while size > 0:
             phrase = stream()
-            pl = min(len(phrase), size)
-            fout.write(phrase[0:pl])
-            size = size - pl
+            for i in range(batch):
+                pl = min(len(phrase), size)
+                fout.write(phrase[0:pl])
+                size = size - pl
 
 def run_synthetic(fname, size):
-    phrase_writer(fname, size, synthetic_phrase())
+    test_writer(fname, size, synthetic_phrase)
 
 def run_english(fname, size):
-    phrase_writer(fname, size, english_phrase())
+    test_writer(fname, size, english_phrase)
 
 def run_random(fname, size):
-    stream_writer(fname, size, random_streamer)
+    test_writer(fname, size, random_phrase)
 
 def failed_mode(fname, size):
     print("UNEXPECTED MODE. Run without args to see help info.")

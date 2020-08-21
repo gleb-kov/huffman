@@ -12,6 +12,9 @@ uintmax_t FileSizeBytes(const char *file) noexcept(false) {
 }
 
 int main(int argc, char *argv[]) {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
     if (argc == 2 && strcmp(argv[1], "--help") == 0) {
         std::cout << "Сonsole utility for compressing/decompressing files using Huffman coding" << std::endl;
         std::cout << "Github: https://github.com/gleb-kov/huffman" << std::endl << std::endl;
